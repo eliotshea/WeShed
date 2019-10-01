@@ -1,4 +1,4 @@
 
 backend/start.bat
-backend/config/db_info.json
-backend/config/token_key.json
+backend/config/
+frontend/node_modules
