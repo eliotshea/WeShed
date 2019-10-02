@@ -19,6 +19,8 @@ class App extends Component {
 
   handleSubmit(evt) {
     evt.preventDefault();
+	
+		localStorage.clear();
 
         var data = {
             username: this.state.username,
@@ -67,7 +69,7 @@ class App extends Component {
 			}	
 	})
 	.then(res => res.json())
-	.then(data => { alert(data.message) })
+	.then(data => { alert(data.authorizedData.username) })
 	.catch(err => { console.log(err) })
 		
 		
