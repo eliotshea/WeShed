@@ -41,7 +41,7 @@ class Login extends Component {
 			//Response from the verified /auth POST
 			Cookies.set('access_token', response.token, { expires: 14 }); //Create a cookie to expire in 2 weeks
 			alert(Cookies.get('access_token'));
-			//Get auth relies on requesting decrypting from back end-- back end responds, appearingly in time?
+			//Get auth relies on requesting decrypting from back end-- back end responds w boolean
 			if(Auth.getAuth())
 				alert("race condition? getAuth() ret true");
 			else

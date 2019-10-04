@@ -12,9 +12,9 @@ const Router = (props) => (
 	  <Route exact path='/' component={Login}/>
 	  <Route exact path='/Register' component={Register}/>
       <Route exact path='/Login' component={Login}/>
-      <Route path="/Home" component={Home} />
-	  <Route path="/Songs" component={Songs} />
-	  <Route path="/Profile" component={Profile} />
+      <PrivateRoute path="/Home" component={Home} />
+	  <PrivateRoute path="/Songs" component={Songs} />
+	  <PrivateRoute path="/Profile" component={Profile} />
     </Switch>
 )
 
