@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
-import { Switch, Route, Redirect, Link } from 'react-router-dom';
-import App from './App';
+import React from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import Login from './Login';
 import Home from './Home';
+import Songs from './Songs';
+import Profile from './Profile';
 import Register from './Register';
 import Auth from './Auth';
 
@@ -11,8 +12,9 @@ const Router = (props) => (
 	  <Route exact path='/' component={Login}/>
 	  <Route exact path='/Register' component={Register}/>
       <Route exact path='/Login' component={Login}/>
-      <PrivateRoute path="/Home" component={Home} />
-	  
+      <Route path="/Home" component={Home} />
+	  <Route path="/Songs" component={Songs} />
+	  <Route path="/Profile" component={Profile} />
     </Switch>
 )
 

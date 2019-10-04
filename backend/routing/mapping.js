@@ -43,7 +43,7 @@ router.post('/auth', (req, res) => {
 				//If all credentials are correct do this
 				let token = jwt.sign({ username: username }, SECRET_KEY, { expiresIn: 129600 }); // Sigining the token
 				jwt.verify(token, SECRET_KEY,  function(err, decoded) {
-				console.log(decoded.username, decoded.id) // bar
+				console.log(decoded.username);
 				});
 				console.log('token: '+ token);
 				res.json({

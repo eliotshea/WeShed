@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import Cookies from 'js-cookie';
+import Auth from './Auth';
 import './App.css';
 
-class Home extends Component {
+class Profile extends Component {
 
 	getToken(){
-	  alert(Cookies.get('access_token'));
+	  alert(Cookies.get('access_token')); 
 	}
 
   render() {
 
-
     return (
-      <div className="Home">
-        <h1> home page </h1>
+      <div className="Profile">
+        <h1> Profile page </h1>
 		<button onClick={this.getToken}>
 			getToken
 		</button>
@@ -23,4 +23,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default Profile;

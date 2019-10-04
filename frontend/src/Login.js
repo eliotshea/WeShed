@@ -39,7 +39,7 @@ class Login extends Component {
             return response.json();
         }).then(function(response) {
 			//Response from the verified /auth POST
-			Cookies.set('access_token', response.token);
+			Cookies.set('access_token', response.token, { expires: 14 }); //Create a cookie to expire in 2 weeks
 			alert(Cookies.get('access_token'));
 			//Get auth relies on requesting decrypting from back end-- back end responds, appearingly in time?
 			if(Auth.getAuth())
@@ -56,12 +56,6 @@ class Login extends Component {
   getToken(){
 	  alert(Cookies.get('access_token')); 
   }
-  
-  async getAuthStatus(){
-	  var x = await Auth.getAuth();
-	  var y = await Auth.getAuth();
-	  return x;
-  }
 
   handleUserChange(evt) {
     this.setState({
@@ -76,12 +70,6 @@ class Login extends Component {
   }
 
   render() {
-
-	
-	if (this.state.toHome === true) {
-	  alert("triggered redirect to home");
-      return <Redirect to='/Home' />
-    }
 
     return (
       <div className="Login">
@@ -99,9 +87,7 @@ class Login extends Component {
 		<button onClick={this.getToken}>
 			getToken
 		</button>
-		<button onClick={this.getAuthStatus}>
-			getAuthStatus
-		</button>
+
 		</div>
 		
 		<div>
