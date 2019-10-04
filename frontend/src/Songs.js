@@ -10,7 +10,6 @@ class Songs extends Component {
 
   render() {
 
-
     return (
       <div className="Songs">
         <h1> Songs page </h1>

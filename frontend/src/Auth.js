@@ -1,5 +1,7 @@
 //Referenced https://github.com/TarakeshS/protected-routes/blob/master/src/App.js
 import Cookies from 'js-cookie';
+import DI from './config/domain_info';
+
 const Auth = {
 	username: " ",
 	verified: false,
@@ -13,7 +15,7 @@ const Auth = {
 		
 		const token = Cookies.get('mytoken')
 		
-	    fetch('http://localhost:4000/verify', {
+	    fetch(DI.DOMAIN + '/verify', {
 			method: 'GET',
 			headers: {
 			'Authorization': 'Bearer ' + token
@@ -33,7 +35,7 @@ const Auth = {
 		
 		const token = Cookies.get('mytoken')
 		
-	    await fetch('http://localhost:4000/verify', {
+	    await fetch(DI.DOMAIN + '/verify', {
 			method: 'GET',
 			headers: {
 			'Authorization': 'Bearer ' + token

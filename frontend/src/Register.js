@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import DI from './config/domain_info';
 
 class Register extends Component {
   constructor() {
@@ -32,7 +33,7 @@ class Register extends Component {
 			lname: this.state.lname
         }
 		
-        fetch("http://localhost:4000/register", {
+        fetch(DI.DOMAIN + "/register", {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)

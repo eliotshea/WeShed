@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import {Redirect} from 'react-router-dom';
 import './App.css';
+import DI from './config/domain_info';
 import Auth from './Auth';
 import Cookies from 'js-cookie';
 
@@ -28,7 +29,7 @@ class Login extends Component {
             password: this.state.password
         }
 		
-        fetch("http://localhost:4000/auth", {
+        fetch(DI.DOMAIN + "/auth", {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
@@ -39,7 +40,7 @@ class Login extends Component {
             return response.json();
         }).then(function(response) {
 			//Response from the verified /auth POST
-			Cookies.set('mytoken', response.token, { expires: 14, domain: 'localhost'}); //Create a cookie to expire in 2 weeks
+			Cookies.set('mytoken', response.token, { expires: 14, domain: DI.DOMAIN_NAME}); //Create a cookie to expire in 2 weeks
 			alert(Cookies.get('mytoken'));
 			//Get auth relies on requesting decrypting from back end-- back end responds w boolean
 			if(Auth.getAuth())
