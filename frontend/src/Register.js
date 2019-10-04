@@ -1,21 +1,23 @@
-
 import React, { Component } from 'react';
 import {Redirect} from 'react-router-dom';
 import './App.css';
-import Auth from './Auth';
-import Cookies from 'js-cookie';
 
-
-class Login extends Component {
+class Register extends Component {
   constructor() {
     super();
     this.state = {
       username: '',
-      password: ''
+      password: '',
+	  email: '',
+	  fname: '',
+	  lname: ''
     };
 
     this.handlePassChange = this.handlePassChange.bind(this);
     this.handleUserChange = this.handleUserChange.bind(this);
+	this.handleEmailChange = this.handleEmailChange.bind(this);
+    this.handlefnameChange = this.handlefnameChange.bind(this);
+	this.handlelnameChange = this.handlelnameChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -25,10 +27,13 @@ class Login extends Component {
 
         var data = {
             username: this.state.username,
-            password: this.state.password
+            password: this.state.password,
+			email: this.state.email,
+			fname: this.state.fname,
+			lname: this.state.lname
         }
 		
-        fetch("http://localhost:4000/auth", {
+        fetch("http://localhost:4000/register", {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
@@ -38,14 +43,11 @@ class Login extends Component {
             }
             return response.json();
         }).then(function(response) {
-			//Response from the verified /auth POST
-			Cookies.set('access_token', response.token);
-			alert(Cookies.get('access_token'));
-			//Get auth relies on requesting decrypting from back end-- back end responds, appearingly in time?
-			if(Auth.getAuth())
-				alert("race condition? getAuth() ret true");
+			//Response from the successful register
+			if(response.success)
+				alert("Successful register");
 			else
-				alert("race condition? getAuth() ret false")
+				alert("Something went wrong");
 			
         }).catch(function(err) {
             console.log(err)
@@ -53,16 +55,6 @@ class Login extends Component {
 
   }
   
-  getToken(){
-	  alert(Cookies.get('access_token')); 
-  }
-  
-  async getAuthStatus(){
-	  var x = await Auth.getAuth();
-	  var y = await Auth.getAuth();
-	  return x;
-  }
-
   handleUserChange(evt) {
     this.setState({
       username: evt.target.value,
@@ -74,17 +66,27 @@ class Login extends Component {
       password: evt.target.value,
     });
   }
+  handleEmailChange(evt) {
+    this.setState({
+      email: evt.target.value,
+    });
+  }
+  handlefnameChange(evt) {
+    this.setState({
+      fname: evt.target.value,
+    });
+  }
+  handlelnameChange(evt) {
+    this.setState({
+      lname: evt.target.value,
+    });
+  }
 
   render() {
 
-	
-	if (this.state.toHome === true) {
-	  alert("triggered redirect to home");
-      return <Redirect to='/Home' />
-    }
 
     return (
-      <div className="Login">
+      <div className="Register">
         <form onSubmit={this.handleSubmit}>
 
           <label>User Name</label>
@@ -92,24 +94,18 @@ class Login extends Component {
 
           <label>Password</label>
           <input type="password" data-test="password" value={this.state.password} onChange={this.handlePassChange} />
-
-          <input type="submit" value="Log In" data-test="submit" />
+		  
+		  <label>Email</label>
+          <input type="email" data-test="email" value={this.state.email} onChange={this.handleEmailChange} />
+		  
+		  <label>Firstname</label>
+          <input type="text" data-test="text" value={this.state.fname} onChange={this.handlefnameChange} />
+		  
+		  <label>Lastname</label>
+          <input type="text" data-test="text" value={this.state.lname} onChange={this.handlelnameChange} />
+		  
+          <input type="submit" value="Register" data-test="submit" />
         </form>
-		<div>
-		<button onClick={this.getToken}>
-			getToken
-		</button>
-		<button onClick={this.getAuthStatus}>
-			getAuthStatus
-		</button>
-		</div>
-		
-		<div>
-		<button onClick={Auth.signout()}>
-			Logout
-		</button>
-		</div>
-		
       </div>
 	  
 	  
@@ -117,8 +113,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
-
-
-
-
+export default Register;

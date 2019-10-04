@@ -6,6 +6,29 @@ const path = require('path');
 const jwt = require('jsonwebtoken');
 
 
+//Referenced: https://codeshack.io/basic-login-system-nodejs-express-mysql/
+router.post('/register', (req, res) => {
+	const username = req.body.username;
+	const password = req.body.password;
+	const email = req.body.email;
+	const fname = req.body.fname;
+	const lname = req.body.lname;
+	
+	console.log(username, password, email, fname, lname);
+	
+	connection.query('INSERT INTO Users (Username, Password, Email, Fname, Lname) VALUES (?,?,?,?,?)'
+		, [username,password,email,fname,lname], (err) => {
+			if(err){
+				console.log(err);
+				res.json({success:false});
+			}
+			else{
+				console.log("Success inserting " + username);
+				res.json({success:true});
+			}
+		});
+});
+
 
 //Referenced: https://codeshack.io/basic-login-system-nodejs-express-mysql/
 router.post('/auth', (req, res) => {

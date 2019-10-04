@@ -1,8 +1,9 @@
 //Referenced https://github.com/TarakeshS/protected-routes/blob/master/src/App.js
+import Cookies from 'js-cookie';
 const Auth = {
 		
 	signout() {
-		localStorage.clear();
+		Cookies.remove('access_token');
 	},
 		
 	async getAuth() {
@@ -10,7 +11,7 @@ const Auth = {
 	    await fetch('http://localhost:4000/verify', {
 			method: 'GET',
 			headers: {
-			'Authorization': 'Bearer ' + localStorage['acess_token']
+			'Authorization': 'Bearer ' + Cookies.get('access_token')
 				}	
 		})
 		.then(res => res.json())
@@ -26,7 +27,7 @@ const Auth = {
 	    await fetch('http://localhost:4000/verify', {
 			method: 'GET',
 			headers: {
-			'Authorization': 'Bearer ' + localStorage['acess_token']
+			'Authorization': 'Bearer ' + Cookies.get('access_token')
 				}	
 		})
 		.then(res => res.json())
