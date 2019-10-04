@@ -39,8 +39,8 @@ class Login extends Component {
             return response.json();
         }).then(function(response) {
 			//Response from the verified /auth POST
-			Cookies.set('access_token', response.token, { expires: 14 }); //Create a cookie to expire in 2 weeks
-			alert(Cookies.get('access_token'));
+			Cookies.set('mytoken', response.token, { expires: 14, domain: 'localhost'}); //Create a cookie to expire in 2 weeks
+			alert(Cookies.get('mytoken'));
 			//Get auth relies on requesting decrypting from back end-- back end responds w boolean
 			if(Auth.getAuth())
 				alert("race condition? getAuth() ret true");
@@ -54,7 +54,11 @@ class Login extends Component {
   }
   
   getToken(){
-	  alert(Cookies.get('access_token')); 
+	  alert(Cookies.get('mytoken')); 
+  }
+  
+  getLogout(){
+	  Auth.signout(); 
   }
 
   handleUserChange(evt) {
@@ -87,14 +91,14 @@ class Login extends Component {
 		<button onClick={this.getToken}>
 			getToken
 		</button>
-
-		</div>
-		
 		<div>
-		<button onClick={Auth.signout()}>
+		<button onClick={this.getLogout}>
 			Logout
 		</button>
 		</div>
+		</div>
+		
+
 		
       </div>
 	  

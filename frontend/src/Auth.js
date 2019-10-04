@@ -6,12 +6,12 @@ const Auth = {
 	
 	signout() {
 		this.verified = false;
-		Cookies.remove('access_token');
+		Cookies.remove('mytoken');
 	},
 		
 	getAuth() {
 		
-		const token = Cookies.get('access_token')
+		const token = Cookies.get('mytoken')
 		
 	    fetch('http://localhost:4000/verify', {
 			method: 'GET',
@@ -31,7 +31,7 @@ const Auth = {
 	
 	async getUser() {
 		
-		const token = Cookies.get('access_token')
+		const token = Cookies.get('mytoken')
 		
 	    await fetch('http://localhost:4000/verify', {
 			method: 'GET',
