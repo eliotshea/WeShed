@@ -18,8 +18,8 @@ class Profile extends Component {
 	}
 	
 	async getU(){
-	  await x = Auth.getUser();
-	  alert(this.state.username); 
+	  var x = await Auth.getUser();
+	  alert(x); 
 	}
 
   render() {
