@@ -1,15 +1,17 @@
 
 const router = require('express').Router();
-const SECRET_KEY = require('../config/token_key').TOKEN_SECRET;
+const TOKEN_KEY = require('../config/keys').TOKEN_SECRET;
+const PASS_KEY = require('../config/keys').PASS_SECRET
 const connection = require('../mysql/mysql_setup'); //Grab the connection handle
 const path = require('path');
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 
 //Referenced: https://codeshack.io/basic-login-system-nodejs-express-mysql/
 router.post('/register', (req, res) => {
 	const username = req.body.username;
-	const password = req.body.password;
+	const password = crypto.pbkdf2Sync(req.body.password, PASS_KEY, 100000, 64, 'sha512').toString('hex');
 	const email = req.body.email;
 	const fname = req.body.fname;
 	const lname = req.body.lname;
@@ -33,16 +35,16 @@ router.post('/register', (req, res) => {
 //Referenced: https://codeshack.io/basic-login-system-nodejs-express-mysql/
 router.post('/auth', (req, res) => {
 	const username = req.body.username;
-	const password = req.body.password;
+	const password = crypto.pbkdf2Sync(req.body.password, PASS_KEY, 100000, 64, 'sha512').toString('hex');
 	
-	console.log("received: " + username, password);
+	console.log("\nreceived: " + username, password + '\n');
 	
 	if(username && password) {
 		connection.query('SELECT * FROM Users WHERE Username = ? AND Password = ?', [username, password], (err, results, fields) => {
 			if (results.length > 0) {
 				//If all credentials are correct do this
-				let token = jwt.sign({ username: username }, SECRET_KEY, { expiresIn: 129600 }); // Sigining the token
-				jwt.verify(token, SECRET_KEY,  function(err, decoded) {
+				let token = jwt.sign({ username: username }, TOKEN_KEY, { expiresIn: 129600 }); // Sigining the token
+				jwt.verify(token, TOKEN_KEY,  function(err, decoded) {
 				console.log(decoded.username);
 				});
 				console.log('token: '+ token);
@@ -88,7 +90,7 @@ router.get('/verify', checkToken, (req, res) => {
 	console.log('\nreached /verify\n');
 	console.log(req.token);
     //verify the JWT token generated for the user
-    jwt.verify(req.token, SECRET_KEY, (err, authorizedData) => {
+    jwt.verify(req.token, TOKEN_KEY, (err, authorizedData) => {
         if(err){
             //If error send Forbidden (403)
                 console.log('ERROR: Could not connect to the protected route');
