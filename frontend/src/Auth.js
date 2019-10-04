@@ -5,6 +5,7 @@ const Auth = {
 	verified: false,
 	
 	signout() {
+		this.verified = false;
 		Cookies.remove('access_token');
 	},
 		
