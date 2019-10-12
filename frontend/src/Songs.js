@@ -6,7 +6,8 @@ class Songs extends Component {
 
 	getToken(){
 	  alert(Cookies.get('mytoken')); 
-	}
+  }
+  
 
   render() {
 
