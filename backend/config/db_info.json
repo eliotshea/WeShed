@@ -1,0 +1,7 @@
+{
+	"host": "weshed.cikw2b5vhedp.us-east-2.rds.amazonaws.com",
+	"user": "some_username",
+	"password": "MdSQFJcn4hDpt100DfIO",
+	"port": "3306",
+	"database": "somedb"
+}
