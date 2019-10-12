@@ -14,7 +14,7 @@ class Profile extends Component {
 	
 
 	getToken(){
-	  alert(Cookies.get('access_token')); 
+	  alert(Cookies.get('mytoken')); 
 	}
 	
 	async getU(){

@@ -5,7 +5,7 @@ import './App.css';
 class Songs extends Component {
 
 	getToken(){
-	  alert(Cookies.get('access_token')); 
+	  alert(Cookies.get('mytoken')); 
 	}
 
   render() {
