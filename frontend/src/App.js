@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import {Switch, Route} from 'react-router-dom';
+import React from 'react';
 import Header from './Header';
 import Router from './Router';
 

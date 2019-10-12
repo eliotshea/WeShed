@@ -1,6 +1,5 @@
 
 import React, { Component } from 'react';
-import {Redirect} from 'react-router-dom';
 import './App.css';
 import DI from './config/domain_info';
 import Auth from './Auth';
