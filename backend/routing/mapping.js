@@ -8,6 +8,28 @@ const path = require('path');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
+
+
+
+
+
+
+router.get('/get_songs', (req, res) => {
+	connection.query('SELECT * FROM Master_songs', (err, results) => {
+			if(err){
+				console.log(err);
+				res.send(err);
+			}
+			else{
+				console.log(results);
+				res.send(JSON.stringify(results));
+			}
+	});
+});
+
+
+
+
 //Referenced: https://codeshack.io/basic-login-system-nodejs-express-mysql/
 router.post('/register', (req, res) => {
 	
