@@ -18,6 +18,7 @@ const Router = (props) => (
     </Switch>
 )
 
+//Referenced https://github.com/TarakeshS/protected-routes/blob/master/src/Router.js
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
