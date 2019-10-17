@@ -9,10 +9,10 @@ class Header extends Component {
     return (
       <div className="Header">
         <Link to='Register'>Register</Link><br/>
-		<Link to='Login'>Login</Link><br/>
-		<Link to='Home'>Home</Link><br/>
-		<Link to='Songs'>Songs</Link><br/>
-		<Link to='Profile'>Profile</Link><br/>
+        <Link to='Login'>Login</Link><br/>
+        <Link to='Home'>Home</Link><br/>
+        <Link to='Songs'>Play</Link><br/>
+        <Link to='Profile'>Profile</Link><br/>
       </div>
     );
   }
