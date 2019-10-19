@@ -1,0 +1,17 @@
+.header-color{
+  background: #1488CC;
+  background: -webkit-linear-gradient(to top, #2B32B2, #1488CC);
+  background: linear-gradient(to top, #2B32B2, #1488CC);
+}
+
+.App-logo{
+  height: 5vmin;
+  border-radius: 20px;
+  margin-right: 1270px;
+  opacity: 0.9;
+  margin-top: 0px;
+}
+
+.feed{
+text-align: center;
+}
