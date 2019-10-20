@@ -4,6 +4,10 @@ import './App.css';
 import DI from './config/domain_info';
 import Auth from './Auth';
 import Cookies from 'js-cookie';
+import logo from './weshedlogo.png';
+import './loginpage.css';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { FacebookLoginButton } from 'react-social-login-buttons';
 
 
 class Login extends Component {
@@ -76,16 +80,32 @@ class Login extends Component {
   render() {
 
     return (
+      <div className="App">
+        <div className="background">
+      <img src={logo} className="App-logo" alt="Logo" />
+      <h1 className="welcome">
+      Welcome to WeShed
+      </h1>
       <div className="Login">
         <form onSubmit={this.handleSubmit}>
 
+          <FormGroup>
           <label>User Name</label>
           <input type="text" data-test="username" value={this.state.username} onChange={this.handleUserChange} />
-
+          </FormGroup>
+          <FormGroup>
           <label>Password</label>
           <input type="password" data-test="password" value={this.state.password} onChange={this.handlePassChange} />
+          </FormGroup>
 
           <input type="submit" value="Log In" data-test="submit" />
+          <div className="text-center pt-3">Or log in with other social media
+        </div>
+        <FacebookLoginButton classname="mt-3 mb-3"/>
+        <div className="text-ceenter"/>
+          <a href="/Register" className="link">Sign up</a>
+          <span className="p-2">|</span>
+          <a href="/Register" className="link">Forgot Password</a>
         </form>
 		<div>
 		<button onClick={this.getToken}>
@@ -97,6 +117,8 @@ class Login extends Component {
 		</button>
 		</div>
 		</div>
+    </div>
+    </div>
 		
 
 		
