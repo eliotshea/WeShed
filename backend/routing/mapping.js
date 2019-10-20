@@ -4,14 +4,8 @@ const TOKEN_KEY = require('../config/keys').TOKEN_SECRET;
 const PASS_KEY = require('../config/keys').PASS_SECRET;
 const SALT = require('../config/keys').SALT;
 const connection = require('../mysql/mysql_setup'); //Grab the connection handle
-const path = require('path');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-
-
-
-
-
 
 
 router.get('/get_songs', (req, res) => {
@@ -26,8 +20,6 @@ router.get('/get_songs', (req, res) => {
 			}
 	});
 });
-
-
 
 
 //Referenced: https://codeshack.io/basic-login-system-nodejs-express-mysql/
