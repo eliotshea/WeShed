@@ -3,6 +3,8 @@ import ReactPlayer from 'react-player';
 import Cookies from 'js-cookie';
 import DI from './config/domain_info';
 import './App.css';
+
+/*
 import { View, StatusBar, TextInput, Text } from 'react-native';
 
 
@@ -47,6 +49,15 @@ class SearchLabel extends Component{
     );
   }
 }
+
+<SearchLabel
+          label="Search for song:"
+					//value=
+					//onSubmitEditing=
+        />
+		<div>
+
+*/
 
 const PREFIX_DIR = './res/sheet_imgs/'
 
@@ -119,12 +130,7 @@ render() {
     return (
       <div className="Songs">
         <h1> Songs page </h1>
-				<SearchLabel
-          label="Search for song:"
-					//value=
-					//onSubmitEditing=
-        />
-		<div>
+		<div>	
 		{leadSheet}
 		{player}
 		</div>
