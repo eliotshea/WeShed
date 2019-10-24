@@ -4,61 +4,6 @@ import Cookies from 'js-cookie';
 import DI from './config/domain_info';
 import './App.css';
 
-/*
-import { View, StatusBar, TextInput, Text } from 'react-native';
-
-
-//Referenced https://facebook.github.io/react-native/docs/getting-started
-class SearchLabel extends Component{
-
-	state = {
-		isFocused: false,
-	};
-	handleFocus = () => this.setState({ isFocused: true });
-  handleBlur = () => this.setState({ isFocused: false });
-
-	render() {
-    const { label, ...props } = this.props;
-    const { isFocused } = this.state;
-    const labelStyle = {
-      position: 'absolute',
-      left: 12,
-      top: !isFocused ? 18 : 0,
-      fontSize: !isFocused ? 20 : 14,
-      color: !isFocused ? '#aaa' : '#000',
-    };
-    return (
-      <View style={{ paddingTop: 18 }}>
-        <Text style={labelStyle}>
-          {label}
-        </Text>
-        <TextInput
-          {...props}
-          style={{	height: 25,
-										width: 200,
-										fontSize: 20,
-										color: '#000',
-										borderBottomWidth: 'medium',
-										borderBottomColor: '#555'
-					}}
-          onFocus={this.handleFocus}
-          onBlur={this.handleBlur}
-          blurOnSubmit
-        />
-      </View>
-    );
-  }
-}
-
-<SearchLabel
-          label="Search for song:"
-					//value=
-					//onSubmitEditing=
-        />
-		<div>
-
-*/
-
 const PREFIX_DIR = './res/sheet_imgs/'
 
 //Referenced https://www.robinwieruch.de/react-fetching-data
@@ -130,7 +75,7 @@ render() {
     return (
       <div className="Songs">
         <h1> Songs page </h1>
-		<div>	
+		<div>
 		{leadSheet}
 		{player}
 		</div>
