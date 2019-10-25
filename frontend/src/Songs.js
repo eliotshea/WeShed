@@ -10,10 +10,13 @@ const PREFIX_DIR = './res/sheet_imgs/'
 class songList extends Component {
 	constructor(props) {
 		super(props);
-		//var song = { msid: null, Name: null, F_handle: null, Bt_ref: null};
 		this.state = {
 			song_arr: [],
-			currentSong: ''
+			
+			curr_Msid: null,
+			curr_Name: null,
+			curr_F_handle: null,
+			curr_Bt_ref: null
 		};
 		this.changeSong = this.changeSong.bind(this);
 		this.resetState = this.resetState.bind(this);
@@ -25,26 +28,34 @@ class songList extends Component {
 		.then(data => this.setState({ song_arr: data }));
 	}
 
-	changeSong(newSong, newTrack) {
+	changeSong(song) {
 		this.setState({
-			currentSong: newSong,
-			backingTrack: newTrack,
+			curr_Msid: song.Msid,
+			curr_Name: song.Name,
+			curr_F_handle: song.F_handle,
+			curr_Bt_ref: song.Bt_ref,
 			timeStamp: Date.now()
-	})
+		})
 	}
 
 	resetState() {
 		let timeElapsed = (Date.now() - this.state.timeStamp) / 1000;
-		alert(`You spent ${timeElapsed} seconds playing ${this.state.currentSong}`);
+		alert(`You spent ${timeElapsed} seconds playing ${this.state.curr_Name}`);
 		this.setState({
-			currentSong: '',
-			backingTrack: '',
+			curr_Msid: null,
+			curr_Name: null,
+			curr_F_handle: null,
+			curr_Bt_ref: null,
 			timeStamp: 0
 		})
 	}
 
 	getToken(){
 	  alert(Cookies.get('mytoken'));
+	}
+	
+	get_current_song(){
+	  alert('info: ' + this.state.curr_Msid)
 	}
 
 
@@ -53,21 +64,21 @@ render() {
 
 	const {song_arr} = this.state;
 	let player = <p></p>;
-	if(this.state.backingTrack){
-		player = <ReactPlayer url={this.state.backingTrack} controls="true" />
+	if(this.state.curr_Bt_ref){
+		player = <center><ReactPlayer url={this.state.curr_Bt_ref} controls="true" /> </center>
 	}
 	let leadSheet = <p></p>;
-	if(this.state.currentSong){
-		leadSheet = <img src={require(`${PREFIX_DIR}${this.state.currentSong}`)} />
+	if(this.state.curr_F_handle){
+		leadSheet = <center><img src={require(`${PREFIX_DIR}${this.state.curr_F_handle}`)} /></center>
 	}
 	let songList = (<ul>
 		{song_arr.map(song =>
-			<li key={song.Msid} onClick={() => this.changeSong(song.F_handle, song.Bt_ref)}>
+			<li key={song.Msid} onClick={() => this.changeSong(song)}>
 				<b>{song.Msid}</b> <b>{song.Name}</b> <b>{song.F_handle}</b> <b>{song.Bt_ref}</b>
 			</li>
 		)}
 	</ul>);
-	if(this.state.currentSong && this.state.backingTrack) {
+	if(this.state.curr_F_handle && this.state.curr_Bt_ref) {
 		songList = <button onClick={this.resetState}>Choose another song</button>
 	}
 
@@ -80,8 +91,14 @@ render() {
 		{player}
 		</div>
 		{songList}
+		
+		<div>
+		<h4> <b>Current:</b> {this.state.curr_Msid} {this.state.curr_Name} {this.state.curr_F_handle} {this.state.curr_Bt_ref}</h4>
+		</div>
+		
       	</div>
-
+		
+		
     );
   }
 }
