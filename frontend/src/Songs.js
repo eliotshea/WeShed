@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactPlayer from 'react-player';
 import Cookies from 'js-cookie';
 import DI from './config/domain_info';
+import Auth from './Auth';
 import './App.css';
 
 const PREFIX_DIR = './res/sheet_imgs/'
@@ -12,14 +13,55 @@ class songList extends Component {
 		super(props);
 		this.state = {
 			song_arr: [],
-			
-			curr_Msid: null,
-			curr_Name: null,
-			curr_F_handle: null,
-			curr_Bt_ref: null
+			Pname: '',
+			curr_Msid: '',
+			curr_Name: '',
+			curr_F_handle: '',
+			curr_Bt_ref: ''
 		};
 		this.changeSong = this.changeSong.bind(this);
 		this.resetState = this.resetState.bind(this);
+		this.handlePnameChange = this.handlePnameChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+	
+	handlePnameChange(evt) {
+    this.setState({
+      Pname: evt.target.value
+	   });
+	};
+	
+	async handleSubmit(evt) {
+		evt.preventDefault();
+	
+		var temp_username = await Auth.getUser();
+
+        var data = {
+            username: temp_username,
+            pname: this.state.Pname,
+			msid: this.state.curr_Msid
+        }
+		
+        fetch(DI.DOMAIN + "/add_song_to_playlist", {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        }).then(function(response) {
+            if (response.status >= 400) {
+              throw new Error("Bad response from server");
+            }
+            return response.json();
+        }).then(function(response) {
+			//Response from the successful register
+			if(response.success)
+				alert("Successful insertion");
+			else
+				alert("Something went wrong");
+			
+        }).catch(function(err) {
+            console.log(err)
+        });
+
 	}
 
 	componentDidMount(){
@@ -42,10 +84,10 @@ class songList extends Component {
 		let timeElapsed = (Date.now() - this.state.timeStamp) / 1000;
 		alert(`You spent ${timeElapsed} seconds playing ${this.state.curr_Name}`);
 		this.setState({
-			curr_Msid: null,
-			curr_Name: null,
-			curr_F_handle: null,
-			curr_Bt_ref: null,
+			curr_Msid: '',
+			curr_Name: '',
+			curr_F_handle: '',
+			curr_Bt_ref: '',
 			timeStamp: 0
 		})
 	}
@@ -86,6 +128,13 @@ render() {
     return (
       <div className="Songs">
         <h1> Songs page </h1>
+		
+		<form onSubmit={this.handleSubmit}>
+		<label>Playlist Name:</label>
+        <input type="text" data-test="text" value={this.state.Pname} onChange={this.handlePnameChange} />
+		<input type="submit" value="Add to playlist" data-test="submit" />
+		</form>
+		
 		<div>
 		{leadSheet}
 		{player}

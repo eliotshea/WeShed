@@ -8,6 +8,29 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 
+
+router.post('/add_song_to_playlist', (req, res) => {
+	
+	const pname = req.body.pname;
+	const username = req.body.username;
+	const msid = req.body.msid;
+	
+	console.log(pname, username, msid);
+	
+	connection.query('INSERT INTO Song_instances (Pname, Username, Msid) VALUES (?,?,?)'
+		, [pname,username,msid], (err) => {
+			if(err){
+				console.log(err);
+				res.json({success:false});
+			}
+			else{
+				console.log("Success inserting " + username);
+				res.json({success:true});
+			}
+		});
+});
+
+
 router.get('/get_songs', (req, res) => {
 	connection.query('SELECT * FROM Master_songs', (err, results) => {
 			if(err){
