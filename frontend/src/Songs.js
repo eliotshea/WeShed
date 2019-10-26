@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ReactPlayer from 'react-player';
-import Cookies from 'js-cookie';
 import DI from './config/domain_info';
 import Auth from './Auth';
 import './App.css';
@@ -33,34 +32,37 @@ class songList extends Component {
 	
 	async handleSubmit(evt) {
 		evt.preventDefault();
-	
-		var temp_username = await Auth.getUser();
-
-        var data = {
-            username: temp_username,
-            pname: this.state.Pname,
-			msid: this.state.curr_Msid
-        }
 		
-        fetch(DI.DOMAIN + "/add_song_to_playlist", {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        }).then(function(response) {
-            if (response.status >= 400) {
-              throw new Error("Bad response from server");
-            }
-            return response.json();
-        }).then(function(response) {
-			//Response from the successful register
-			if(response.success)
-				alert("Successful insertion");
-			else
-				alert("Something went wrong");
+		//To ensure that empty is never used for insertions to playlist songs
+		if(this.state.Pname != ''){
+			var temp_username = await Auth.getUser();
+		
+			var data = {
+				username: temp_username,
+				pname: this.state.Pname,
+				msid: this.state.curr_Msid
+			}
+		
+			fetch(DI.DOMAIN + "/add_song_to_playlist", {
+				method: 'POST',
+				headers: {'Content-Type': 'application/json'},
+				body: JSON.stringify(data)
+			}).then(function(response) {
+				if (response.status >= 400) {
+				throw new Error("Bad response from server");
+				}
+				return response.json();
+			}).then(function(response) {
+				//Response from the successful register
+				if(response.success)
+					alert("Successful insertion");
+				else
+					alert("Something went wrong");
 			
-        }).catch(function(err) {
-            console.log(err)
-        });
+			}).catch(function(err) {
+				console.log(err)
+			});
+		}
 
 	}
 
@@ -92,9 +94,6 @@ class songList extends Component {
 		})
 	}
 
-	getToken(){
-	  alert(Cookies.get('mytoken'));
-	}
 	
 	get_current_song(){
 	  alert('info: ' + this.state.curr_Msid)
@@ -116,7 +115,7 @@ render() {
 	let songList = (<ul>
 		{song_arr.map(song =>
 			<li key={song.Msid} onClick={() => this.changeSong(song)}>
-				<b>{song.Msid}</b> <b>{song.Name}</b> <b>{song.F_handle}</b> <b>{song.Bt_ref}</b>
+				<b>Msid: {song.Msid}</b> <b>{song.Name}</b> <b>{song.F_handle}</b> <b>{song.Bt_ref}</b>
 			</li>
 		)}
 	</ul>);

@@ -7,7 +7,17 @@ const connection = require('../mysql/mysql_setup'); //Grab the connection handle
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
-
+router.post('/del_playlist_song', (req, res) => {
+	connection.query('DELETE FROM Song_instances WHERE Song_instances.Siid = ?', [req.body.siid], (err, results) => {
+			if(err){
+				console.log(err);
+				res.json({success:false});
+			}
+			else{
+				res.json({success:true});
+			}
+	});
+});
 
 router.post('/add_song_to_playlist', (req, res) => {
 	
@@ -30,6 +40,20 @@ router.post('/add_song_to_playlist', (req, res) => {
 		});
 });
 
+router.post('/get_playlists_songs', (req, res) => {
+	
+	//Get all of the users songs
+	connection.query('SELECT * FROM Song_instances INNER JOIN Master_songs ON Song_instances.Msid = Master_songs.Msid WHERE Song_instances.Username = ? ORDER BY Pname', [req.body.username], (err, results) => {
+			if(err){
+				console.log(err);
+				res.send(err);
+			}
+			else{
+				console.log(results);
+				res.send(JSON.stringify(results));
+			}
+	});
+});
 
 router.get('/get_songs', (req, res) => {
 	connection.query('SELECT * FROM Master_songs', (err, results) => {
@@ -129,7 +153,6 @@ const checkToken = (req, res, next) => {
 //Referenced https://medium.com/@maison.moa/using-jwt-json-web-tokens-to-authorize-users-and-protect-api-routes-3e04a1453c3e
 router.get('/verify', checkToken, (req, res) => {
 	console.log('\nreached /verify\n');
-	console.log(req.token);
     //verify the JWT token generated for the user
     jwt.verify(req.token, TOKEN_KEY, (err, authorizedData) => {
         if(err){

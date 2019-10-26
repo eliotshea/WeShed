@@ -2,6 +2,7 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Login from './Login';
 import Home from './Home';
+import Playlists from './Playlists';
 import Songs from './Songs';
 import Profile from './Profile';
 import Register from './Register';
@@ -13,6 +14,7 @@ const Router = (props) => (
 	  <Route exact path='/Register' component={Register}/>
       <Route exact path='/Login' component={Login}/>
       <PrivateRoute path="/Home" component={Home} />
+	  <PrivateRoute path="/Playlists" component={Playlists} />
 	  <PrivateRoute path="/Songs" component={Songs} />
 	  <PrivateRoute path="/Profile" component={Profile} />
     </Switch>
