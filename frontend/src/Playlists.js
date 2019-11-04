@@ -105,7 +105,6 @@ class Playlist extends Component {
 	}
 
 
-
 render() {
 
 	const {song_arr} = this.state;
@@ -117,21 +116,22 @@ render() {
 	if(this.state.curr_F_handle){
 		leadSheet = <center><img src={require(`${PREFIX_DIR}${this.state.curr_F_handle}`)} /></center>
 	}
-	let Playlist = (<ul>
+	let Playlist = ( <ul>
 		{song_arr.map(song =>
-			<li key={song.Msid} onClick={() => this.changeSong(song)}>
-				<b>Siid: {song.Siid}</b> <b>Msid: {song.Msid}</b> <b>{song.Name}</b> <b>{song.F_handle}</b> <b>{song.Bt_ref}</b> <b>Playlist name: {song.Pname}</b>
+			<li key={song.Siid} onClick={() => this.changeSong(song)}>
+				  <b>Siid: {song.Siid}</b> <b>Msid: {song.Msid}</b> <b>{song.Name}</b> <b>{song.F_handle}</b> <b>{song.Bt_ref}</b> <b>Playlist name: {song.Pname}</b>
 			</li>
 		)}
-	</ul>);
+	</ul> );
+	
 	if(this.state.curr_F_handle && this.state.curr_Bt_ref) {
 		Playlist = <button onClick={this.resetState}>Choose another song</button>
 	}
 
 
     return (
-      <div className="Songs">
-        <h1> Songs page </h1>
+      <div className="Playlists">
+        <h1> Playlists page </h1>
 		
 		<div>
 		{leadSheet}

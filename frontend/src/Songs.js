@@ -34,7 +34,7 @@ class songList extends Component {
 		evt.preventDefault();
 		
 		//To ensure that empty is never used for insertions to playlist songs
-		if(this.state.Pname != ''){
+		if(this.state.Pname !== ''){
 			var temp_username = await Auth.getUser();
 		
 			var data = {
