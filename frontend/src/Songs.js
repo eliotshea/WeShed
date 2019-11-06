@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
 import ReactPlayer from 'react-player';
 import DI from './config/domain_info';
+import Cookies from 'js-cookie';
 import Auth from './Auth';
 import './App.css';
 
 const PREFIX_DIR = './res/sheet_imgs/'
+
+function getFormattedDate(date) {
+    let year = date.getFullYear();
+    let month = (1 + date.getMonth()).toString().padStart(2, '0');
+    let day = date.getDate().toString().padStart(2, '0');
+  
+    return year + '-' + month + '-' + day;
+ }
 
 //Referenced https://www.robinwieruch.de/react-fetching-data
 class songList extends Component {
@@ -19,7 +28,7 @@ class songList extends Component {
 			curr_Bt_ref: ''
 		};
 		this.changeSong = this.changeSong.bind(this);
-		this.resetState = this.resetState.bind(this);
+		this.newSong = this.newSong.bind(this);
 		this.handlePnameChange = this.handlePnameChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
@@ -82,9 +91,28 @@ class songList extends Component {
 		})
 	}
 
-	resetState() {
+	 async newSong(evt) {
+		 evt.preventDefault();
+
+		//Converting JS date info to format SQL likes
 		let timeElapsed = (Date.now() - this.state.timeStamp) / 1000;
-		alert(`You spent ${timeElapsed} seconds playing ${this.state.curr_Name}`);
+		let currentDate = getFormattedDate(new Date(Date.now()));
+		alert(`You spent ${timeElapsed} seconds playing ${this.state.curr_Name}`); 
+		alert(new Date(timeElapsed * 1000).toISOString().substr(11, 8));
+		var tempMsid = parseInt(this.state.curr_Msid); 
+		alert(currentDate);
+		var temp_username = await Auth.getUser();
+		var data = {
+			Msid: tempMsid,
+			Username: temp_username,
+			Time_played: new Date(timeElapsed * 1000).toISOString().substr(11, 8),
+			currentDate: currentDate
+		}
+		fetch(DI.DOMAIN + "/create_play_session", {
+			method: 'POST',
+			headers: {'Content-Type': 'application/json'},
+			body: JSON.stringify(data)
+		});
 		this.setState({
 			curr_Msid: '',
 			curr_Name: '',
@@ -102,7 +130,8 @@ class songList extends Component {
 
 
 render() {
-
+	//Logic deciding whether a lead sheet is displayed or not
+	//Place for general display logic
 	const {song_arr} = this.state;
 	let player = <p></p>;
 	if(this.state.curr_Bt_ref){
@@ -113,6 +142,7 @@ render() {
 		leadSheet = <center><img src={require(`${PREFIX_DIR}${this.state.curr_F_handle}`)} /></center>
 	}
 	let songList = (<ul>
+		<li><button></button></li>
 		{song_arr.map(song =>
 			<li key={song.Msid} onClick={() => this.changeSong(song)}>
 				<b>Msid: {song.Msid}</b> <b>{song.Name}</b> <b>{song.F_handle}</b> <b>{song.Bt_ref}</b>
@@ -120,7 +150,7 @@ render() {
 		)}
 	</ul>);
 	if(this.state.curr_F_handle && this.state.curr_Bt_ref) {
-		songList = <button onClick={this.resetState}>Choose another song</button>
+		songList = <button onClick={this.newSong}>Choose another song</button>
 	}
 
 

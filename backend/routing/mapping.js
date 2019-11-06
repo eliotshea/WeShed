@@ -43,7 +43,8 @@ router.post('/add_song_to_playlist', (req, res) => {
 router.post('/get_playlists_songs', (req, res) => {
 	
 	//Get all of the users songs
-	connection.query('SELECT * FROM Song_instances INNER JOIN Master_songs ON Song_instances.Msid = Master_songs.Msid WHERE Song_instances.Username = ? ORDER BY Pname', [req.body.username], (err, results) => {
+	connection.query('SELECT * FROM Song_instances INNER JOIN Master_songs ON Song_instances.Msid = Master_songs.Msid WHERE Song_instances.Username = ? ORDER BY Pname',
+					 [req.body.username], (err, results) => {
 			if(err){
 				console.log(err);
 				res.send(err);
@@ -53,6 +54,26 @@ router.post('/get_playlists_songs', (req, res) => {
 				res.send(JSON.stringify(results));
 			}
 	});
+});
+
+router.post('/create_play_session', (req, res) => {
+	const Msid = req.body.Msid;
+	const Username = req.body.Username;
+	const Time_played = req.body.Time_played;
+	const currentDate = req.body.currentDate;
+
+	console.log(Msid, Username, Time_played, currentDate)
+	connection.query('INSERT INTO Play_sessions (Msid, Username, Time_played, Date) VALUES (?,?,?,?)', 
+		[Msid, Username, Time_played, currentDate], (err) => {
+			if(err){
+				console.log(err);
+				res.json({success:false})
+			}
+			else {
+				console.log("Success adding play session");
+				res.json({success:true})
+			}
+		});
 });
 
 router.get('/get_songs', (req, res) => {
