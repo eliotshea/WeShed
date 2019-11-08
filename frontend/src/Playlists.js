@@ -103,9 +103,13 @@ class Playlist extends Component {
         }).then(response => response.json())
 		.then(data => this.setState({ song_arr: data }));
 	}
+	
+	
 
 
 render() {
+	
+	
 
 	const {song_arr} = this.state;
 	let player = <p></p>;
@@ -116,10 +120,25 @@ render() {
 	if(this.state.curr_F_handle){
 		leadSheet = <center><img src={require(`${PREFIX_DIR}${this.state.curr_F_handle}`)} /></center>
 	}
+	
+	var prev_pname = '';
+	//The purpose of this function is to only print Playlist name once based on trailing pname
+	function Getsolo(props){
+		if(prev_pname !== props.tsong.Pname){
+			prev_pname = props.tsong.Pname;
+			return(<div align="left"><b> {props.tsong.Pname} </b></div>);
+		}
+		else{
+			prev_pname = props.tsong.Pname;
+			return(null);
+		}
+	}
+	
 	let Playlist = ( <ul>
 		{song_arr.map(song =>
 			<li key={song.Siid} onClick={() => this.changeSong(song)}>
-				  <b>Siid: {song.Siid}</b> <b>Msid: {song.Msid}</b> <b>{song.Name}</b> <b>{song.F_handle}</b> <b>{song.Bt_ref}</b> <b>Playlist name: {song.Pname}</b>
+		          <Getsolo tsong = {song} />
+				  <b>Siid: {song.Siid} Msid: {song.Msid} {song.Name} {song.F_handle} {song.Bt_ref}</b>
 			</li>
 		)}
 	</ul> );
