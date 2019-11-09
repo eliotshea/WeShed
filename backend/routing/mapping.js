@@ -7,6 +7,18 @@ const connection = require('../mysql/mysql_setup'); //Grab the connection handle
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
+router.post('/del_playlist', (req, res) => {
+	connection.query('DELETE FROM Song_instances WHERE Song_instances.Username = ? AND Song_instances.Pname = ?', [req.body.username, req.body.pname], (err, results) => {
+			if(err){
+				console.log(err);
+				res.json({success:false});
+			}
+			else{
+				res.json({success:true});
+			}
+	});
+});
+
 router.post('/del_playlist_song', (req, res) => {
 	connection.query('DELETE FROM Song_instances WHERE Song_instances.Siid = ?', [req.body.siid], (err, results) => {
 			if(err){

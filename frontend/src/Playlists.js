@@ -16,14 +16,16 @@ class Playlist extends Component {
 			curr_Name: '',
 			curr_F_handle: '',
 			curr_Bt_ref: '',
-			curr_Siid: ''
+			curr_Siid: '',
+			curr_Pname: ''
 		};
 		this.changeSong = this.changeSong.bind(this);
 		this.resetState = this.resetState.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
+		this.delSong = this.delSong.bind(this);
+		this.delPlaylist = this.delPlaylist.bind(this);
 	}
 	
-	handleSubmit(evt) {
+	delSong(evt) {
 		evt.preventDefault();
 
         var data = { siid: this.state.curr_Siid }
@@ -52,12 +54,44 @@ class Playlist extends Component {
 		this.resetState();
 
 	}
+	
+	async delPlaylist(evt) {
+		evt.preventDefault();
+		
+		var temp_username = await Auth.getUser();
+
+        var data = { username: temp_username,
+					pname: this.state.curr_Pname}
+		
+        fetch(DI.DOMAIN + "/del_playlist", {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        }).then(function(response) {
+            if (response.status >= 400) {
+              throw new Error("Bad response from server");
+            }
+            return response.json();
+        }).then(function(response) {
+			//Response from the successful deletions
+			if(response.success)
+				alert("Successful deletions");
+			else
+				alert("Something went wrong");
+			
+        }).catch(function(err) {
+            console.log(err)
+        });
+		
+		//Call a reset for song_arr refresh
+		this.resetState();
+
+	}
 
 	async componentDidMount(){
 		
 		var temp_username = await Auth.getUser();
-		
-		var d = {username: temp_username}
+		var d = {username: temp_username};
 		
 		fetch(DI.DOMAIN + "/get_playlists_songs", {
             method: 'POST',
@@ -75,6 +109,7 @@ class Playlist extends Component {
 			curr_F_handle: song.F_handle,
 			curr_Bt_ref: song.Bt_ref,
 			curr_Siid: song.Siid,
+			curr_Pname: song.Pname,
 			timeStamp: Date.now()
 		})
 	}
@@ -88,6 +123,7 @@ class Playlist extends Component {
 			curr_F_handle: '',
 			curr_Bt_ref: '',
 			curr_Siid: '',
+			curr_Pname: '',
 			timeStamp: 0
 		})
 		
@@ -108,22 +144,22 @@ class Playlist extends Component {
 
 
 render() {
-	
-	
 
 	const {song_arr} = this.state;
-	let player = <p></p>;
+	let player = null;
 	if(this.state.curr_Bt_ref){
 		player = <center><ReactPlayer url={this.state.curr_Bt_ref} controls="true" /> </center>
 	}
-	let leadSheet = <p></p>;
+	let leadSheet = null;
 	if(this.state.curr_F_handle){
 		leadSheet = <center><img src={require(`${PREFIX_DIR}${this.state.curr_F_handle}`)} /></center>
 	}
+	let Del_song = null;
+	let Del_playlist = null;
 	
 	var prev_pname = '';
 	//The purpose of this function is to only print Playlist name once based on trailing pname
-	function Getsolo(props){
+	function Printsolopname(props){
 		if(prev_pname !== props.tsong.Pname){
 			prev_pname = props.tsong.Pname;
 			return(<div align="left"><b> {props.tsong.Pname} </b></div>);
@@ -137,14 +173,16 @@ render() {
 	let Playlist = ( <ul>
 		{song_arr.map(song =>
 			<li key={song.Siid} onClick={() => this.changeSong(song)}>
-		          <Getsolo tsong = {song} />
-				  <b>Siid: {song.Siid} Msid: {song.Msid} {song.Name} {song.F_handle} {song.Bt_ref}</b>
+		          <Printsolopname tsong = {song} />
+				  <b>Siid: {song.Siid} Msid: {song.Msid} {song.Name} {song.F_handle} {song.Bt_ref} </b>
 			</li>
 		)}
 	</ul> );
 	
 	if(this.state.curr_F_handle && this.state.curr_Bt_ref) {
 		Playlist = <button onClick={this.resetState}>Choose another song</button>
+		Del_song = <button onClick={this.delSong}>Delete current song</button>
+		Del_playlist = <button onClick={this.delPlaylist}>Delete current playlist</button>
 	}
 
 
@@ -156,19 +194,17 @@ render() {
 		{leadSheet}
 		{player}
 		</div>
-		{Playlist}
 		
 		<div>
-		<h4> <b>Current:</b> Siid: {this.state.curr_Siid} Msid: {this.state.curr_Msid} {this.state.curr_Name} {this.state.curr_F_handle} {this.state.curr_Bt_ref}</h4>
+		<br></br>
+		{Del_song} {Del_playlist} {Playlist}
 		</div>
 		
 		<div>
-		<form onSubmit={this.handleSubmit}>
-		<input type="submit" value="Delete current song" data-test="submit" />
-		</form>
+		<h4> <b>Current:</b> Siid: {this.state.curr_Siid} Msid: {this.state.curr_Msid} {this.state.curr_Name} {this.state.curr_F_handle} {this.state.curr_Bt_ref} Pname: {this.state.curr_Pname}</h4>
 		</div>
 		
-      	</div>
+      </div>
 		
 		
     );
