@@ -6,7 +6,15 @@ import './App.css';
 
 const PREFIX_DIR = './res/sheet_imgs/'
 
-//Referenced https://www.robinwieruch.de/react-fetching-data
+function getFormattedDate(date) {
+    let year = date.getFullYear();
+    let month = (1 + date.getMonth()).toString().padStart(2, '0');
+    let day = date.getDate().toString().padStart(2, '0');
+  
+    return year + '-' + month + '-' + day;
+ }
+
+//Referenced https://www.robinwieruch.de/react-fetching-data and Songs.js
 class Playlist extends Component {
 	constructor(props) {
 		super(props);
@@ -115,8 +123,28 @@ class Playlist extends Component {
 	}
 
 	async resetState() {
+		
+		//Converting JS date info to format SQL likes
 		let timeElapsed = (Date.now() - this.state.timeStamp) / 1000;
-		alert(`You spent ${timeElapsed} seconds playing ${this.state.curr_Name}`);
+		let currentDate = getFormattedDate(new Date(Date.now()));
+		alert(`You spent ${timeElapsed} seconds playing ${this.state.curr_Name}`); 
+		alert(new Date(timeElapsed * 1000).toISOString().substr(11, 8));
+		var tempMsid = parseInt(this.state.curr_Msid); 
+		alert(currentDate);
+		var temp_username = await Auth.getUser();
+		var data = {
+			Msid: tempMsid,
+			Username: temp_username,
+			Time_played: new Date(timeElapsed * 1000).toISOString().substr(11, 8),
+			currentDate: currentDate
+		}
+		fetch(DI.DOMAIN + "/create_play_session", {
+			method: 'POST',
+			headers: {'Content-Type': 'application/json'},
+			body: JSON.stringify(data)
+		});
+		
+		
 		this.setState({
 			curr_Msid: '',
 			curr_Name: '',
@@ -127,9 +155,6 @@ class Playlist extends Component {
 			timeStamp: 0
 		})
 		
-		//Update song_arr contents
-		var temp_username = await Auth.getUser();
-		
 		var d = {username: temp_username}
 		
 		fetch(DI.DOMAIN + "/get_playlists_songs", {
@@ -137,7 +162,7 @@ class Playlist extends Component {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(d)
         }).then(response => response.json())
-		.then(data => this.setState({ song_arr: data }));
+		.then(info => this.setState({ song_arr: info }));
 	}
 	
 	
