@@ -88,18 +88,30 @@ router.post('/create_play_session', (req, res) => {
 		});
 });
 
-router.get('/get_songs', (req, res) => {
+router.get('/get_songs', (res) => {
 	connection.query('SELECT * FROM Master_songs', (err, results) => {
-			if(err){
-				console.log(err);
-				res.send(err);
-			}
-			else{
-				console.log(results);
-				res.send(JSON.stringify(results));
-			}
+		if(err){
+			console.log(err);
+			res.send(err);
+		}
+		else{
+			console.log(results);
+			res.send(JSON.stringify(results));
+		}
 	});
 });
+
+router.post('/get_user_stats', (req, res) => {
+	connection.query('SELECT * FROM User_stats WHERE Username = ?', [req.body.Username], (err, results) =>{
+		if(err){
+			console.log(err);
+			res.send(err);
+		}else{
+				console.log(results);
+				res.send(JSON.stringify(results));
+		}
+	})
+})
 
 
 //Referenced: https://codeshack.io/basic-login-system-nodejs-express-mysql/
@@ -116,6 +128,18 @@ router.post('/register', (req, res) => {
 	
 	connection.query('INSERT INTO Users (Username, Password, Email, Fname, Lname) VALUES (?,?,?,?,?)'
 		, [username,password,email,fname,lname], (err) => {
+			if(err){
+				console.log(err);
+				res.json({success:false});
+			}
+			else{
+				console.log("Success inserting " + username);
+				res.json({success:true});
+			}
+		});
+
+		connection.query('INSERT INTO User_stats (Username, Longest_streak, Current_streak, Favorite_song, Worst_song) VALUES (?, 0, 0, NULL, NULL)'
+		, [username], (err) => {
 			if(err){
 				console.log(err);
 				res.json({success:false});
