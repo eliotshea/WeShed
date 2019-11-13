@@ -43,8 +43,8 @@ class Profile extends Component {
 
   render() {
 		const photo = this.state.image
-		const userName = 'Harvey Specter'
-		const location = 'New York, USA'
+		const userName = 'First Last'
+		const location = 'USA'
 
 		const comments = [
 			{
