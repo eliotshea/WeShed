@@ -88,11 +88,11 @@ router.post('/create_play_session', (req, res) => {
 		});
 });
 
-router.get('/get_songs', (res) => {
+router.get('/get_songs', (req, res) => {
 	connection.query('SELECT * FROM Master_songs', (err, results) => {
 		if(err){
 			console.log(err);
-			res.send(err);
+			results.send(err);
 		}
 		else{
 			console.log(results);
@@ -109,6 +109,23 @@ router.post('/get_user_stats', (req, res) => {
 		}else{
 				console.log(results);
 				res.send(JSON.stringify(results));
+		}
+	})
+})
+
+router.post('/get_user_play_sessions', (req, res) => {
+	connection.query('SELECT CAST (Date AS CHAR) FROM Play_sessions WHERE Username = ? GROUP BY Date', [req.body.Username], (err, results) =>{
+		if(err){
+			console.log(err);
+			res.send(err);
+		}else{
+			console.log(results);
+			dateArray = [];
+			for (var i in results) {
+				dateArray.push(results[i]['CAST (Date AS CHAR)']);
+			}
+			console.log(dateArray);
+			res.send(dateArray);
 		}
 	})
 })

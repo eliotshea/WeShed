@@ -25,7 +25,8 @@ class songList extends Component {
 			curr_Msid: '',
 			curr_Name: '',
 			curr_F_handle: '',
-			curr_Bt_ref: ''
+			curr_Bt_ref: '',
+			Streak_checked: false
 		};
 		this.changeSong = this.changeSong.bind(this);
 		this.newSong = this.newSong.bind(this);
@@ -97,22 +98,40 @@ class songList extends Component {
 		//Converting JS date info to format SQL likes
 		let timeElapsed = (Date.now() - this.state.timeStamp) / 1000;
 		let currentDate = getFormattedDate(new Date(Date.now()));
-		alert(`You spent ${timeElapsed} seconds playing ${this.state.curr_Name}`); 
-		alert(new Date(timeElapsed * 1000).toISOString().substr(11, 8));
 		var tempMsid = parseInt(this.state.curr_Msid); 
-		alert(currentDate);
 		var temp_username = await Auth.getUser();
+
 		var data = {
 			Msid: tempMsid,
 			Username: temp_username,
 			Time_played: new Date(timeElapsed * 1000).toISOString().substr(11, 8),
 			currentDate: currentDate
 		}
+
 		fetch(DI.DOMAIN + "/create_play_session", {
 			method: 'POST',
 			headers: {'Content-Type': 'application/json'},
 			body: JSON.stringify(data)
 		});
+
+		if (this.state.Streak_checked === false){
+			fetch(DI.DOMAIN + "/get_user_play_sessions", {
+				method: 'POST',
+				headers: {'Content-Type': 'application/json'},
+				body: JSON.stringify(data)
+			}).then(response => {
+				console.log(response);
+				response.json();
+			}).then(data => {
+				this.setState({dateArray: data})
+			})
+				for (var i in this.state.dateArray) {
+					console.log(i);
+				}
+			};
+
+
+
 		this.setState({
 			curr_Msid: '',
 			curr_Name: '',
