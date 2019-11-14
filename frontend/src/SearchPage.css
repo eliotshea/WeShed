@@ -1,0 +1,106 @@
+
+.field {
+  width: 30%;
+  height: 25px;
+  border-radius: 20px;
+  position: fixed;
+  top: 1.5%;
+  left: 35%;
+  right: 35%;
+  background-color: rgba(4, 11, 12, 0.1);
+  transition: 0.3s all;
+}
+.field:hover {
+  background-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.05);
+}
+.field.active {
+  background-color: #ffffff;
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.2);
+}
+.field.active input::-webkit-input-placeholder {
+  color: rgba(69, 73, 64, 0.6);
+}
+.field input::-webkit-input-placeholder {
+  color: rgba(204, 190, 190, 0.514);
+}
+.field input {
+  width: 96%;
+  height: 25px;
+  left: 4px;
+  position: relative;
+  border: none;
+  border-radius: 4px;
+  font-family: "Gotham SSm A", "Gotham SSm B", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  background-color: transparent;
+  color: #282828;
+  outline: none;
+  box-shadow: 0px 4px 20px 0px transparent;
+  transition: 0.3s background-color ease-in-out, 0.3s box-shadow ease-in-out,
+    0.1s padding ease-in-out;
+}
+
+.message{
+  width: 30%;
+  height: 25px;
+  border-radius: 20px;
+  position: center;
+  top: 1%;
+  margin-left: 35%;
+  margin-right: 35%;
+}
+
+.songs{
+   float: left;
+}
+
+.songList{
+  margin-top:1%;
+}
+
+.button{
+  background-color: #002a57;
+  border-radius: 20px;
+  border: none;
+  color: white;
+  padding: 25px 40px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.button:hover{
+  background-color: rgba(0, 59, 122, 1);
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.05);
+}
+
+.sheet{
+  float:left;
+  margin-left: 10%;
+}
+
+.player{
+  float:right;
+  margin-right: 10%;
+}
+
+.songPage{
+ margin-top: 3%;
+}
+
+ul, li {
+    list-style-type: none;
+}
+
+li {
+    padding-left: 0;
+    margin-left: 0;
+}
+
+li button {
+    margin-top: 1em;
+    margin-right: 1em;
+}
