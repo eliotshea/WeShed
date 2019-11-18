@@ -15,6 +15,7 @@ class Header extends Component {
 		    <Link to='Playlists'>Playlists</Link><br/>
         <Link to='Songs'>Songs</Link><br/>
         <Link to='Profile'>Profile</Link><br/>
+		<Link to='Stats'>Stats</Link><br/>
         <Link to='Search'>
           <img
             className="searchIcon"
