@@ -7,6 +7,24 @@ const connection = require('../mysql/mysql_setup'); //Grab the connection handle
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
+router.post('/get_streaks', (req, res) => {
+	//Referenced https://jaxenter.com/10-sql-tricks-that-you-didnt-think-were-possible-125934.html for querying consecutive days
+	const mysql = "WITH ps_dates AS ( SELECT DISTINCT DISTINCT Play_sessions.Psid, Play_sessions.Date ps_date FROM Play_sessions WHERE Username = ? ),"
+	+ " ps_date_groups AS ( SELECT Psid, ps_date, ps_date - row_number() OVER (ORDER BY ps_date) AS grp FROM ps_dates )"
+	+ " SELECT ps_date_groups.Psid, min(ps_date) AS Psmin, max(ps_date) AS Psmax, max(ps_date) - min(ps_date) + 1 AS length FROM ps_date_groups GROUP BY grp ORDER BY length DESC";
+	
+	connection.query(mysql, [req.body.username], (err, results) => {
+		if(err){
+			console.log(err);
+			results.send(err);
+		}
+		else{
+			console.log(results);
+			res.json(results);
+		}
+	});
+});
+
 router.post('/del_playlist', (req, res) => {
 	connection.query('DELETE FROM Song_instances WHERE Song_instances.Username = ? AND Song_instances.Pname = ?', [req.body.username, req.body.pname], (err, results) => {
 			if(err){
@@ -63,7 +81,7 @@ router.post('/get_playlists_songs', (req, res) => {
 			}
 			else{
 				console.log(results);
-				res.send(JSON.stringify(results));
+				res.json(results);
 			}
 	});
 });
@@ -243,8 +261,6 @@ router.get('/verify', checkToken, (req, res) => {
             }
         })
 });
-
-
 
 //Expose the routing to the app
 module.exports = router;
