@@ -25,6 +25,38 @@ router.post('/get_streaks', (req, res) => {
 	});
 });
 
+router.post('/get_fav_song', (req, res) => {
+	const mysql = "SELECT * FROM (SELECT Msid, COUNT(Msid) as Max_count FROM Play_sessions WHERE Play_sessions.Username = ? GROUP BY Msid ORDER BY Max_count DESC) as The_max"
+	+ " INNER JOIN Master_songs ON Master_songs.Msid = The_max.Msid LIMIT 1";
+	
+	connection.query(mysql, [req.body.username], (err, results) => {
+			if(err){
+				console.log(err);
+				res.send(err);
+			}
+			else{
+				console.log(results);
+				res.json(results);
+			}
+	});
+});
+
+router.post('/get_wor_song', (req, res) => {
+	const mysql = "SELECT * FROM (SELECT Msid, COUNT(Msid) as Min_count FROM Play_sessions WHERE Play_sessions.Username = ? GROUP BY Msid ORDER BY Min_count) as The_min"
+	+ " INNER JOIN Master_songs ON Master_songs.Msid = The_min.Msid LIMIT 1";
+	
+	connection.query(mysql, [req.body.username], (err, results) => {
+			if(err){
+				console.log(err);
+				res.send(err);
+			}
+			else{
+				console.log(results);
+				res.json(results);
+			}
+	});
+});
+
 router.post('/del_playlist', (req, res) => {
 	connection.query('DELETE FROM Song_instances WHERE Song_instances.Username = ? AND Song_instances.Pname = ?', [req.body.username, req.body.pname], (err, results) => {
 			if(err){
