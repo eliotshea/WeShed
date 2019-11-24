@@ -7,6 +7,23 @@ const connection = require('../mysql/mysql_setup'); //Grab the connection handle
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
+
+
+router.post('/get_days_played', (req, res) => {
+	const mysql = "SELECT DISTINCT COUNT(Date) as days_played FROM Play_sessions WHERE Play_sessions.Username = ?";
+	
+	connection.query(mysql, [req.body.username], (err, results) => {
+			if(err){
+				console.log(err);
+				res.send(err);
+			}
+			else{
+				console.log(results);
+				res.json(results);
+			}
+	});
+});
+
 router.post('/get_streaks', (req, res) => {
 	//Referenced https://jaxenter.com/10-sql-tricks-that-you-didnt-think-were-possible-125934.html for querying consecutive days
 	const mysql = "WITH ps_dates AS ( SELECT DISTINCT DISTINCT Play_sessions.Psid, Play_sessions.Date ps_date FROM Play_sessions WHERE Username = ? ),"
@@ -25,9 +42,43 @@ router.post('/get_streaks', (req, res) => {
 	});
 });
 
+//Global favorite song
+router.get('/get_gfav_song', (req, res) => {
+	const mysql = "SELECT * FROM (SELECT Msid, COUNT(Msid) as Max_count FROM Play_sessions GROUP BY Msid) as The_max"
+	+ " INNER JOIN Master_songs ON Master_songs.Msid = The_max.Msid ORDER BY Max_count DESC LIMIT 1";
+
+	connection.query(mysql, (err, results) => {
+			if(err){
+				console.log(err);
+				res.send(err);
+			}
+			else{
+				console.log(results);
+				res.json(results);
+			}
+	});
+});
+
+//Global least played song
+router.get('/get_gwor_song', (req, res) => {
+	const mysql = "SELECT * FROM (SELECT Msid, COUNT(Msid) as Min_count FROM Play_sessions GROUP BY Msid) as The_min"
+	+ " INNER JOIN Master_songs ON Master_songs.Msid = The_min.Msid ORDER BY Min_count LIMIT 1";
+	
+	connection.query(mysql, (err, results) => {
+			if(err){
+				console.log(err);
+				res.send(err);
+			}
+			else{
+				console.log(results);
+				res.json(results);
+			}
+	});
+});
+
 router.post('/get_fav_song', (req, res) => {
-	const mysql = "SELECT * FROM (SELECT Msid, COUNT(Msid) as Max_count FROM Play_sessions WHERE Play_sessions.Username = ? GROUP BY Msid ORDER BY Max_count DESC) as The_max"
-	+ " INNER JOIN Master_songs ON Master_songs.Msid = The_max.Msid LIMIT 1";
+	const mysql = "SELECT * FROM (SELECT Msid, COUNT(Msid) as Max_count FROM Play_sessions WHERE Play_sessions.Username = ? GROUP BY Msid) as The_max"
+	+ " INNER JOIN Master_songs ON Master_songs.Msid = The_max.Msid ORDER BY Max_count DESC LIMIT 1";
 	
 	connection.query(mysql, [req.body.username], (err, results) => {
 			if(err){
@@ -42,8 +93,8 @@ router.post('/get_fav_song', (req, res) => {
 });
 
 router.post('/get_wor_song', (req, res) => {
-	const mysql = "SELECT * FROM (SELECT Msid, COUNT(Msid) as Min_count FROM Play_sessions WHERE Play_sessions.Username = ? GROUP BY Msid ORDER BY Min_count) as The_min"
-	+ " INNER JOIN Master_songs ON Master_songs.Msid = The_min.Msid LIMIT 1";
+	const mysql = "SELECT * FROM (SELECT Msid, COUNT(Msid) as Min_count FROM Play_sessions WHERE Play_sessions.Username = ? GROUP BY Msid) as The_min"
+	+ " INNER JOIN Master_songs ON Master_songs.Msid = The_min.Msid ORDER BY Min_count LIMIT 1";
 	
 	connection.query(mysql, [req.body.username], (err, results) => {
 			if(err){
