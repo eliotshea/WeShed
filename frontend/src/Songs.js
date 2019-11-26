@@ -4,6 +4,7 @@ import DI from './config/domain_info';
 import Cookies from 'js-cookie';
 import Auth from './Auth';
 import './App.css';
+import {isEmpty} from 'lodash';
 
 const PREFIX_DIR = './res/sheet_imgs/'
 
@@ -22,11 +23,6 @@ class songList extends Component {
 		this.state = {
 			song_arr: [],
 			Pname: '',
-			curr_Msid: '',
-			curr_Name: '',
-			curr_F_handle: '',
-			curr_Bt_ref: '',
-			Streak_checked: false
 		};
 		this.changeSong = this.changeSong.bind(this);
 		this.newSong = this.newSong.bind(this);
@@ -35,9 +31,9 @@ class songList extends Component {
 	}
 	
 	handlePnameChange(evt) {
-    this.setState({
-      Pname: evt.target.value
-	   });
+		this.setState({
+		Pname: evt.target.value
+		});
 	};
 	
 	async handleSubmit(evt) {
@@ -80,6 +76,22 @@ class songList extends Component {
 		fetch(DI.DOMAIN + '/get_songs')
 		.then(response => response.json())
 		.then(data => this.setState({ song_arr: data }));
+		
+		//Recieves props passed from the search bar
+		if(!isEmpty(this.props.location.state)){
+			const { Msid } = this.props.location.state;
+			const { Name } = this.props.location.state;
+			const { F_handle } = this.props.location.state;
+			const { Bt_ref } = this.props.location.state;
+			
+			this.setState({
+				curr_Msid: Msid,
+				curr_Name: Name,
+				curr_F_handle: F_handle,
+				curr_Bt_ref: Bt_ref,
+				timeStamp: Date.now()
+			})
+	}
 	}
 
 	changeSong(song) {
@@ -154,11 +166,11 @@ render() {
 	const {song_arr} = this.state;
 	let player = <p></p>;
 	if(this.state.curr_Bt_ref){
-		player = <center><ReactPlayer url={this.state.curr_Bt_ref} controls="true" /> </center>
+		player = <center><ReactPlayer className="player" url={this.state.curr_Bt_ref} controls="true" /> </center>
 	}
 	let leadSheet = <p></p>;
 	if(this.state.curr_F_handle){
-		leadSheet = <center><img src={require(`${PREFIX_DIR}${this.state.curr_F_handle}`)} /></center>
+		leadSheet = <center><img className="sheet" src={require(`${PREFIX_DIR}${this.state.curr_F_handle}`)} /></center>
 	}
 	let songList = (<ul>
 		<li><button></button></li>
@@ -188,11 +200,6 @@ render() {
 		{player}
 		</div>
 		{songList}
-		
-		<div>
-		<h4> <b>Current:</b> {this.state.curr_Msid} {this.state.curr_Name} {this.state.curr_F_handle} {this.state.curr_Bt_ref}</h4>
-		</div>
-		
       	</div>
 		
 		
