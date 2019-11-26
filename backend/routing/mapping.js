@@ -43,9 +43,9 @@ router.post('/get_days_played', (req, res) => {
 
 router.post('/get_streaks', (req, res) => {
 	//Referenced https://jaxenter.com/10-sql-tricks-that-you-didnt-think-were-possible-125934.html for querying consecutive days
-	const mysql = "WITH ps_dates AS ( SELECT DISTINCT DISTINCT Play_sessions.Psid, Play_sessions.Date ps_date FROM Play_sessions WHERE Username = ? ),"
-	+ " ps_date_groups AS ( SELECT Psid, ps_date, ps_date - row_number() OVER (ORDER BY ps_date) AS grp FROM ps_dates )"
-	+ " SELECT ps_date_groups.Psid, min(ps_date) AS Psmin, max(ps_date) AS Psmax, max(ps_date) - min(ps_date) + 1 AS length FROM ps_date_groups GROUP BY grp ORDER BY length DESC";
+	const mysql = "WITH ps_dates AS (SELECT DISTINCT Date as ps_date FROM Play_sessions WHERE Username = ?),"
+	+ " ps_date_groups AS ( SELECT ps_date, ps_date - row_number() OVER (ORDER BY ps_date) AS grp FROM ps_dates )"
+	+ " SELECT min(ps_date) AS Psmin, max(ps_date) AS Psmax, max(ps_date) - min(ps_date) + 1 AS length FROM ps_date_groups GROUP BY grp ORDER BY length DESC";
 
 	connection.query(mysql, [req.body.username], (err, results) => {
 		if(err){

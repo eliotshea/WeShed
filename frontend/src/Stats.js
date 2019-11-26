@@ -70,7 +70,7 @@ render() {
 	let streakList = (
 	<ul>
 		{this.state.streak_arr.map(streak =>
-			<li key={streak.Psid}>
+			<li key={streak.Psmin}>
 				<b>Start date: {streak.Psmin} End date: {streak.Psmax} Length: {streak.length}</b>
 			</li>
 		)}
