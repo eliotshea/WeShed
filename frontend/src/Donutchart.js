@@ -4,7 +4,7 @@ import DI from './config/domain_info';
 import Auth from './Auth';
 
 //Referenced https://stackoverflow.com/questions/54868777/how-to-use-react-with-p5-js
-export default class Piechart extends Component {
+export default class Donutchart extends Component {
 	
 	constructor(props) {
 		super(props);
@@ -34,12 +34,8 @@ export default class Piechart extends Component {
   CANVASY = 300;
   XPOS = 0;
   YPOS = 0;
-  AMPLITUDE = 150;
   
   iradians = 0;
-  goal_days = 100;
-  tick = 0;
-  iradians_offsetter = 0.1
 	
   setup = (p5, parent) => {
     p5.createCanvas(this.CANVASX, this.CANVASY).parent(parent)
@@ -59,7 +55,7 @@ export default class Piechart extends Component {
 	
 	//Green progress line
 	p5.fill(p5.color(100,255,100));
-	if(this.state.days_played != 0)
+	if(this.state.days_played !== 0)
 		p5.arc((this.XPOS+this.CANVASX)/2, (this.YPOS+this.CANVASY)/2, this.CANVASX, this.CANVASY, this.iradians, this.iradians + ((p5.TWO_PI/365)*this.state.days_played));
 	
 	
@@ -80,7 +76,6 @@ export default class Piechart extends Component {
 	p5.circle(this.CANVASX-80,250,4);
 	
 	this.iradians+=.01;
-	this.iradians_offsetter += 0.01
 	
   }
 

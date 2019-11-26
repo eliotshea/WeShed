@@ -9,6 +9,23 @@ const jwt = require('jsonwebtoken');
 
 
 
+
+
+router.post('/get_play_session_count', (req, res) => {
+	const mysql = "SELECT COUNT(Date) as ps_count FROM Play_sessions WHERE Play_sessions.Username = ?";
+
+	connection.query(mysql, [req.body.username], (err, results) => {
+			if(err){
+				console.log(err);
+				res.send(err);
+			}
+			else{
+				console.log(results);
+				res.json(results);
+			}
+	});
+});
+
 router.post('/get_days_played', (req, res) => {
 	const mysql = "SELECT DISTINCT COUNT(Date) as days_played FROM Play_sessions WHERE Play_sessions.Username = ?";
 

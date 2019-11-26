@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import DI from './config/domain_info';
 import Auth from './Auth';
-import Wave from './Wave';
-import Piechart from './Piechart';
+import Levelbadge from './Levelbadge';
+import Donutchart from './Donutchart';
 
 export default class Stats extends Component {
 	constructor(props) {
@@ -82,8 +82,8 @@ let worSong = <h6><b>Global Least Played Song:</b> {this.state.gwor_song} played
     return (
       <div className="Stats">
 	  <h1>Statistics</h1>
-	  <Wave/>
-	  <Piechart/>
+	  <Levelbadge/>
+	  <Donutchart/>
 	  {favSong}
 	  {worSong}
 	  <h3>Top Streaks</h3>
