@@ -18,7 +18,7 @@ export default class Donutchart extends Component {
 		var temp_username = await Auth.getUser();
 		var d = {username: temp_username};
 		
-		fetch(DI.DOMAIN + "/get_days_played", {
+		await fetch(DI.DOMAIN + "/get_days_played", {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(d)
@@ -26,7 +26,9 @@ export default class Donutchart extends Component {
 		.then(data => {
 			if(data.length > 0)
 				this.setState({ days_played: data[0].days_played});
-		});	
+		});
+		
+		//this.setState({ days_played: 365});
 		
 	}
 	
@@ -45,7 +47,13 @@ export default class Donutchart extends Component {
   draw = p5 => {
 	p5.strokeWeight(1);
 	p5.clear();
-	p5.fill(45);
+	
+	//Apply golden record coating or regular
+	if(this.state.days_played < 365)
+		p5.fill(45);
+	else
+		p5.fill(p5.color(212,175,55));
+
 	p5.circle((this.XPOS+this.CANVASX)/2, (this.YPOS+this.CANVASY)/2, (this.CANVASX/2)-5, (this.CANVASY/2)-5);
 	
 	//Record grooves/lines
@@ -54,21 +62,25 @@ export default class Donutchart extends Component {
 	p5.circle((this.XPOS+this.CANVASX)/2, (this.YPOS+this.CANVASY)/2, this.CANVASX/4,this.CANVASY/4);
 	
 	//Green progress line
-	p5.fill(p5.color(100,255,100));
-	if(this.state.days_played !== 0)
-		p5.arc((this.XPOS+this.CANVASX)/2, (this.YPOS+this.CANVASY)/2, this.CANVASX, this.CANVASY, this.iradians, this.iradians + ((p5.TWO_PI/365)*this.state.days_played));
-	
-	
+	if(this.state.days_played < 365){
+		p5.fill(p5.color(100,255,100));
+		if(this.state.days_played !== 0)
+			p5.arc((this.XPOS+this.CANVASX)/2, (this.YPOS+this.CANVASY)/2, this.CANVASX, this.CANVASY, this.iradians, this.iradians + ((p5.TWO_PI/365)*this.state.days_played));
+	}
+	else{
+		//The white shimmer arc
+		p5.fill(p5.color(255,255,255));
+		p5.arc((this.XPOS+this.CANVASX)/2, (this.YPOS+this.CANVASY)/2, this.CANVASX, this.CANVASY, this.iradians, this.iradians + ((p5.TWO_PI/365)*10));
+		
+	}
 	
 	//Grey medium circle
 	p5.fill(155);
 	p5.circle((this.XPOS+this.CANVASX)/2, (this.YPOS+this.CANVASY)/2, this.CANVASX/5,this.CANVASY/5);
 	
-	
 	//The white hole in the record
 	p5.fill(255)
 	p5.circle((this.XPOS+this.CANVASX)/2, (this.YPOS+this.CANVASY)/2, this.CANVASX/50,this.CANVASY/50);
-	
 	
 	//The record needle
 	p5.strokeWeight(10);
