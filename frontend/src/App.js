@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from './Header';
+import {Header} from './Header';
 import Router from './Router';
 
 class App extends React.Component {
@@ -9,7 +9,7 @@ class App extends React.Component {
       <div className="App">
 		<Header/>
 		<Router/>
-		
+
       </div>
     );
   }
