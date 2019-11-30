@@ -45,20 +45,11 @@ class Login extends Component {
 			//Response from the verified /auth POST
 			Cookies.set('mytoken', response.token, { expires: 14, domain: DI.DOMAIN_NAME}); //Create a cookie to expire in 2 weeks
 			alert(Cookies.get('mytoken'));
-			//Get auth relies on requesting decrypting from back end-- back end responds w boolean
-			if(Auth.getAuth())
-				alert("race condition? getAuth() ret true");
-			else
-				alert("race condition? getAuth() ret false")
 			
         }).catch(function(err) {
             console.log(err)
         });
 
-  }
-  
-  getToken(){
-	  alert(Cookies.get('mytoken')); 
   }
   
   getLogout(){
@@ -108,9 +99,6 @@ class Login extends Component {
           <a href="/Register" className="link">Forgot Password</a>
         </form>
 		<div>
-		<button onClick={this.getToken}>
-			getToken
-		</button>
 		<div>
 		<button onClick={this.getLogout}>
 			Logout
