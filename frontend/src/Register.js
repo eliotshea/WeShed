@@ -87,6 +87,7 @@ class Register extends Component {
 
     return (
       <div className="Register">
+	  <h1> Register </h1>
         <form onSubmit={this.handleSubmit}>
 
           <label>User Name</label>
