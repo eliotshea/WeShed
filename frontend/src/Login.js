@@ -44,6 +44,7 @@ class Login extends Component {
         }).then(function(response) {
 			//Response from the verified /auth POST
 			Cookies.set('mytoken', response.token, { expires: 14, domain: DI.DOMAIN_NAME}); //Create a cookie to expire in 2 weeks
+			alert(response.token);
 			
         }).catch(function(err) {
             console.log(err)

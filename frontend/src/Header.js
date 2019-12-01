@@ -30,24 +30,17 @@ class Header extends Component {
   render() {
 
     let header;
-    if (Auth.getAuth()){
       header = <div className="Header">
         <Link to='Home'>Home</Link><br/>
         <Link to='Playlists'>Playlists</Link><br/>
         <Link to='Songs'>Songs</Link><br/>
         <Link to='Profile'>Profile</Link><br/>
         <Link to='Stats'>Stats</Link><br/>
-        <div className="searchBar">  <Autocomplete
-        suggestions={this.state.song_arr}/>
-        </div>
-        <Link to='Login' className='logout' onClick={this.getLogout}>Logout</Link>
+           <div className="searchBar">  <Autocomplete
+           suggestions={this.state.song_arr}/>
+           </div>
+           <Link to='Login' className='logout' onClick={this.getLogout}>Logout</Link>
       </div>
-    } else {
-      header = <div className="Header">
-      <Link to='Register'>Register</Link><br/>
-      <Link to='Login'>Login</Link><br/>
-    </div>
-    }
     
     return (
       <div>
