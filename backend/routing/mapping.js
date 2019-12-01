@@ -125,6 +125,20 @@ router.post('/get_wor_song', (req, res) => {
 	});
 });
 
+router.post('/get_history', (req, res) =>{
+	const mysql = "select Master_songs.Name, results.Max_date, results.total FROM Master_songs INNER JOIN (select Play_sessions.Msid, MAX(Play_sessions.Date) as Max_date, SEC_TO_TIME(SUM(TIME_TO_SEC(Time_played))) As total FROM Play_sessions WHERE Username = 'eliot' group By Msid) AS results ON results.Msid = Master_songs.Msid order by total DESC";
+
+	connection.query(mysql, [req.body.username], (err, results) => {
+		if(err){
+			console.log(err);
+			res.send(err);
+		} else {
+			console.log(results);
+			res.json(results);
+		}
+	});
+});
+
 router.post('/del_playlist', (req, res) => {
 	connection.query('DELETE FROM Song_instances WHERE Song_instances.Username = ? AND Song_instances.Pname = ?', [req.body.username, req.body.pname], (err, results) => {
 			if(err){

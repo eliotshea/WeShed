@@ -10,6 +10,7 @@ export default class Stats extends Component {
 		super(props);
 		this.state = {
 			streak_arr: [],
+			history_arr: [],
 			gfav_song: 'N/A',
 			gfav_song_count: 0,
 			fav_song: 'N/A',
@@ -20,7 +21,7 @@ export default class Stats extends Component {
 	}
 	
 	async componentDidMount(){
-		
+		var obj;
 		var temp_username = await Auth.getUser();
 		var d = {username: temp_username};
 		var today = new Date();
@@ -42,7 +43,17 @@ export default class Stats extends Component {
 					this.setState({current_streak: streak.length})
 				}
 			})
-	});
+		});
+
+		fetch(DI.DOMAIN + "/get_history", {
+			method: 'POST',
+			headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(d)
+		}).then(response => response.json())
+		.then(data => obj = data)
+		.then(() =>{
+			this.setState({history_arr: obj});
+		});
 		
 		fetch(DI.DOMAIN + '/get_gfav_song')
 		.then(response => response.json())
@@ -77,7 +88,7 @@ export default class Stats extends Component {
 			if(data.length > 0)
 				this.setState({ wor_song: data[0].Name, wor_song_count: data[0].Min_count });
 		});
-		
+	
 	}
 
 render() {
@@ -89,6 +100,23 @@ render() {
 			</li>
 		)}
 	</ul>);
+
+	let history = (
+		<table className="History">
+			<tr>
+				<th>Title</th>
+				<th>Last played</th>
+				<th>Total time</th>
+			</tr>
+			{this.state.history_arr.map(item =>
+				<tr>
+					<td>{item.Name}</td>
+					<td>{item.Max_date}</td>
+					<td>{item.total}</td>
+				</tr>
+			)}
+		</table>
+		);
 	
 let favSong = <h6><b>Global Favorite Song:</b> {this.state.gfav_song} played {this.state.gfav_song_count} times <b>Favorite Song:</b> {this.state.fav_song} played {this.state.fav_song_count} times</h6>
 let worSong = <h6><b>Global Least Played Song:</b> {this.state.gwor_song} played {this.state.gwor_song_count} times <b>Least Played Song:</b> {this.state.wor_song} played {this.state.wor_song_count} times</h6>
@@ -105,8 +133,8 @@ let worSong = <h6><b>Global Least Played Song:</b> {this.state.gwor_song} played
 		{favSong}
 		{worSong}
 		<h3>Top Streaks</h3>
+		{history}
 		{streakList}
-	  
       </div>
     );
   }

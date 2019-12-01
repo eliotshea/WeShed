@@ -74,7 +74,6 @@
 
 .searchBar {
   position: absolute;
-  top: 0.25em;
   left: 40em;
 }
 
@@ -122,6 +121,9 @@
 
 .Stats {
   margin-top: 3em;
+}
+.History {
+  float: center
 }
 .Donutchart {
   float: left;
