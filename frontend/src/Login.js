@@ -44,7 +44,6 @@ class Login extends Component {
         }).then(function(response) {
 			//Response from the verified /auth POST
 			Cookies.set('mytoken', response.token, { expires: 14, domain: DI.DOMAIN_NAME}); //Create a cookie to expire in 2 weeks
-			alert(Cookies.get('mytoken'));
 			
         }).catch(function(err) {
             console.log(err)
@@ -90,13 +89,8 @@ class Login extends Component {
           </FormGroup>
 
           <input type="submit" value="Log In" data-test="submit" />
-          <div className="text-center pt-3">Or log in with other social media
-        </div>
-        <FacebookLoginButton classname="mt-3 mb-3"/>
         <div className="text-ceenter"/>
           <a href="/Register" className="link">Sign up</a>
-          <span className="p-2">|</span>
-          <a href="/Register" className="link">Forgot Password</a>
         </form>
 		<div>
 		<div>
