@@ -5,7 +5,7 @@ import DI from './config/domain_info';
 import './App.css';
 
 class Header extends Component {
-  
+
   constructor(props) {
     super(props);
 
@@ -33,13 +33,7 @@ class Header extends Component {
         <Link to='Songs'>Songs</Link><br/>
         <Link to='Profile'>Profile</Link><br/>
 		    <Link to='Stats'>Stats</Link><br/>
-        <Link to='Search'>
-          <img
-            className="searchIcon"
-            src={require("./searchIcon.png")}
-            style={{width: 30, height: 25}}
-          />
-        </Link><br/>
+
       </div>
       <div className="searchBar">  <Autocomplete
         suggestions={this.state.song_arr}/></div>
@@ -71,7 +65,7 @@ class Autocomplete extends Component {
       userInput: "",
       active: (props.locked && props.active) || false,
     };
-    
+
   }
 
   // Event fired when the input value is changed

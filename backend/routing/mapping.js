@@ -290,11 +290,9 @@ router.post('/register', (req, res) => {
 		, [username], (err) => {
 			if(err){
 				console.log(err);
-				res.json({success:false});
 			}
 			else{
 				console.log("Success inserting " + username);
-				res.json({success:true});
 			}
 		});
 });
