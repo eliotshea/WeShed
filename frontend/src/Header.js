@@ -1,8 +1,9 @@
 import React, { Component, Fragment} from 'react';
+import Auth from './Auth';
 import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
 import DI from './config/domain_info';
-import './App.css';
+import './Header.css';
 
 class Header extends Component {
 
@@ -20,23 +21,37 @@ class Header extends Component {
     .then(response => response.json())
     .then(data => obj = data)
 		.then( () => this.setState({ song_arr: obj }));
-	}
+  }
+
+  getLogout(){
+    Auth.signout();
+  }
 
   render() {
-    return (
-      <div>
-      <div className="Header">
-        <Link to='Register'>Register</Link><br/>
-        <Link to='Login'>Login</Link><br/>
+
+    let header;
+    if (Auth.getAuth()){
+      header = <div className="Header">
         <Link to='Home'>Home</Link><br/>
-		    <Link to='Playlists'>Playlists</Link><br/>
+        <Link to='Playlists'>Playlists</Link><br/>
         <Link to='Songs'>Songs</Link><br/>
         <Link to='Profile'>Profile</Link><br/>
-		    <Link to='Stats'>Stats</Link><br/>
-
+        <Link to='Stats'>Stats</Link><br/>
+        <div className="searchBar">  <Autocomplete
+        suggestions={this.state.song_arr}/>
+        </div>
+        <Link to='Login' className='logout' onClick={this.getLogout}>Logout</Link>
       </div>
-      <div className="searchBar">  <Autocomplete
-        suggestions={this.state.song_arr}/></div>
+    } else {
+      header = <div className="Header">
+      <Link to='Register'>Register</Link><br/>
+      <Link to='Login'>Login</Link><br/>
+    </div>
+    }
+    
+    return (
+      <div>
+       {header}
       </div>
     );
   }
