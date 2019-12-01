@@ -3,6 +3,7 @@ import DI from './config/domain_info';
 import Auth from './Auth';
 import Levelbadge from './Levelbadge';
 import Donutchart from './Donutchart';
+import './App.css';
 
 export default class Stats extends Component {
 	constructor(props) {
@@ -22,13 +23,26 @@ export default class Stats extends Component {
 		
 		var temp_username = await Auth.getUser();
 		var d = {username: temp_username};
+		var today = new Date();
+		var dd = String(today.getDate()).padStart(2, '0');
+		var mm = String(today.getMonth() + 1).padStart(2, '0');
+		var yyyy = today.getFullYear();
+
+		today = mm + '-' + dd + '-' + yyyy;
 		
 		fetch(DI.DOMAIN + "/get_streaks", {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(d)
-        }).then(response => response.json())
-		.then(data => this.setState({ streak_arr: data }));
+		}).then(response => response.json())
+		.then(data => {
+			this.setState({ username: temp_username, streak_arr: data, max_streak: data[0].length, current_streak: 0})
+			data.forEach(streak =>{
+				if( streak.Psmax.substring(0,10) === today ){
+					this.setState({current_streak: streak.length})
+				}
+			})
+	});
 		
 		fetch(DI.DOMAIN + '/get_gfav_song')
 		.then(response => response.json())
@@ -71,7 +85,7 @@ render() {
 	<ul>
 		{this.state.streak_arr.map(streak =>
 			<li key={streak.Psmin}>
-				<b>Start date: {streak.Psmin} End date: {streak.Psmax} Length: {streak.length}</b>
+				<b>Start date: {streak.Psmin.substring(0,10)} End date: {streak.Psmax.substring(0,10)} Length: {streak.length}</b>
 			</li>
 		)}
 	</ul>);
@@ -81,13 +95,17 @@ let worSong = <h6><b>Global Least Played Song:</b> {this.state.gwor_song} played
 	
     return (
       <div className="Stats">
-	  <h1>Statistics</h1>
-	  <Levelbadge/>
-	  <Donutchart/>
-	  {favSong}
-	  {worSong}
-	  <h3>Top Streaks</h3>
-	  {streakList}
+		<div className="headerCard">
+			<h1>{this.state.username}</h1>
+			<Levelbadge className="Levelbadge"/>
+			<p>Longest streak: {this.state.max_streak}</p>
+			<p>Current streak: {this.state.current_streak}</p>
+		</div>
+		<Donutchart className="Donutchart"/>
+		{favSong}
+		{worSong}
+		<h3>Top Streaks</h3>
+		{streakList}
 	  
       </div>
     );
