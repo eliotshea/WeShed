@@ -12,7 +12,8 @@ class Header extends Component {
 
     this.state = {
       song_arr: [],
-      user_arr: []
+      user_arr: [],
+      show: false
     }
   }
 
@@ -22,19 +23,27 @@ class Header extends Component {
     .then(response => response.json())
     .then(data => obj = data)
     .then( () => this.setState({ song_arr: obj }));
-    
+
     fetch(DI.DOMAIN + '/get_usernames')
     .then(response => response.json())
     .then(data => obj = data)
     .then( () => this.setState({ user_arr: obj}));
   }
 
+  showModal = () => {
+    this.setState({ show: true });
+  }
+
+  hideModal = () => {
+    this.setState({ show: false });
+  }
+
   getLogout(){
     Auth.signout();
   }
 
-  render() {
 
+  render() {
     let header;
       header = <div className="Header">
         <Link to='Home'>Home</Link><br/>
@@ -45,9 +54,13 @@ class Header extends Component {
            <div className="searchBar">  <Autocomplete
            suggestions={this.state.song_arr.concat(this.state.user_arr)}/>
            </div>
-           <Link to='Login' className='logout' onClick={this.getLogout}>Logout</Link>
+            <Modal show={this.state.show} handleClose={this.hideModal} >
+              <h4>Are you sure?</h4>
+              <button onClick={this.getLogout}>Yes</button>
+            </Modal>
+           <Link to='Login' className='logout' onClick={this.showModal}>Logout</Link>
       </div>
-    
+
     return (
       <div>
        {header}
@@ -55,6 +68,19 @@ class Header extends Component {
     );
   }
 }
+
+const Modal = ({ handleClose, show, children }) => {
+  const showHideClassName = show ? 'modal display-block' : 'modal display-none';
+
+  return (
+    <div className={showHideClassName}>
+      <section className='modal-main' onClick={handleClose}>
+        {children}
+        <button>No</button>
+      </section>
+    </div>
+  );
+};
 
 class Autocomplete extends Component {
   static propTypes = {
