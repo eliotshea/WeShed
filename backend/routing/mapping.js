@@ -126,7 +126,7 @@ router.post('/get_wor_song', (req, res) => {
 });
 
 router.post('/get_history', (req, res) =>{
-	const mysql = "select Master_songs.Name, results.Max_date, results.total FROM Master_songs INNER JOIN (select Play_sessions.Msid, MAX(Play_sessions.Date) as Max_date, SEC_TO_TIME(SUM(TIME_TO_SEC(Time_played))) As total FROM Play_sessions WHERE Username = 'eliot' group By Msid) AS results ON results.Msid = Master_songs.Msid order by total DESC";
+	const mysql = "select Master_songs.Name, Master_songs.Bt_ref, Master_songs.F_handle, Master_songs.Msid, results.Max_date, results.total FROM Master_songs INNER JOIN (select Play_sessions.Msid, MAX(Play_sessions.Date) as Max_date, SEC_TO_TIME(SUM(TIME_TO_SEC(Time_played))) As total FROM Play_sessions WHERE Username = ? group By Msid) AS results ON results.Msid = Master_songs.Msid order by total DESC";
 
 	connection.query(mysql, [req.body.username], (err, results) => {
 		if(err){
@@ -235,6 +235,19 @@ router.get('/get_songs', (req, res) => {
 
 router.get('/get_users', (req, res) => {
 	connection.query('SELECT * FROM Users', (err, results) => {
+		if(err){
+			console.log(err);
+			results.send(err);
+		}
+		else{
+			console.log(results);
+			res.send(JSON.stringify(results));
+		}
+	});
+});
+
+router.get('/get_usernames', (req, res) => {
+	connection.query('SELECT DISTINCT Username AS Name FROM Users', (err, results) => {
 		if(err){
 			console.log(err);
 			results.send(err);

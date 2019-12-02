@@ -11,7 +11,8 @@ class Header extends Component {
     super(props);
 
     this.state = {
-      song_arr: []
+      song_arr: [],
+      user_arr: []
     }
   }
 
@@ -20,7 +21,12 @@ class Header extends Component {
 		fetch(DI.DOMAIN + '/get_songs')
     .then(response => response.json())
     .then(data => obj = data)
-		.then( () => this.setState({ song_arr: obj }));
+    .then( () => this.setState({ song_arr: obj }));
+    
+    fetch(DI.DOMAIN + '/get_usernames')
+    .then(response => response.json())
+    .then(data => obj = data)
+    .then( () => this.setState({ user_arr: obj}));
   }
 
   getLogout(){
@@ -37,7 +43,7 @@ class Header extends Component {
         <Link to='Profile'>Profile</Link><br/>
         <Link to='Stats'>Stats</Link><br/>
            <div className="searchBar">  <Autocomplete
-           suggestions={this.state.song_arr}/>
+           suggestions={this.state.song_arr.concat(this.state.user_arr)}/>
            </div>
            <Link to='Login' className='logout' onClick={this.getLogout}>Logout</Link>
       </div>
@@ -83,8 +89,7 @@ class Autocomplete extends Component {
 
     // Filter our suggestions that don't contain the user's input
     const filteredSuggestions = suggestions.filter(
-      suggestion =>
-        suggestion.Name.toLowerCase().indexOf(userInput.toLowerCase()) > -1
+      suggestion => suggestion.Name.toLowerCase().indexOf(userInput.toLowerCase()) > -1
     );
 
     // Update the user input and filtered suggestions, reset the active
@@ -168,6 +173,7 @@ class Autocomplete extends Component {
                 className = "suggestion-active";
               }
 
+              if (suggestion.hasOwnProperty('Msid')){
               return (
                 <li
                   className={className}
@@ -185,6 +191,20 @@ class Autocomplete extends Component {
                 }}>{suggestion.Name}</Link>}
                 </li>
               );
+              } else {
+                return (
+                <li className={className}
+                key={suggestion}
+                onClick={onClick} >
+                  <Link to={{
+                    pathname: 'Stats',
+                    state: {
+                      Username: suggestion.Name
+                    }
+                  }}>{suggestion.Name}</Link>
+                </li>
+                );
+              };
             })}
           </ul>
         );
@@ -202,6 +222,7 @@ class Autocomplete extends Component {
 
           <form ref="form">
             <input id="input"
+            autocomplete="off"
             type="text"
             placeholder="Search for song..."
             onChange={this.onChange}

@@ -1,9 +1,18 @@
 import React, { Component } from 'react';
+import {isEmpty} from 'lodash';
 import DI from './config/domain_info';
 import Auth from './Auth';
 import Levelbadge from './Levelbadge';
 import Donutchart from './Donutchart';
 import './App.css';
+
+function getFormattedDate(date) {
+    let year = date.getFullYear();
+    let month = (1 + date.getMonth()).toString().padStart(2, '0');
+    let day = date.getDate().toString().padStart(2, '0');
+
+    return year + '-' + month + '-' + day;
+ }
 
 export default class Stats extends Component {
 	constructor(props) {
@@ -22,15 +31,18 @@ export default class Stats extends Component {
 	
 	async componentDidMount(){
 		var obj;
-		var temp_username = await Auth.getUser();
-		var d = {username: temp_username};
-		var today = new Date();
-		var dd = String(today.getDate()).padStart(2, '0');
-		var mm = String(today.getMonth() + 1).padStart(2, '0');
-		var yyyy = today.getFullYear();
+		var temp_username, d;
+		if (isEmpty(this.props.location.state)){
+			temp_username = await Auth.getUser();
+			d = {username: temp_username};
+		} else {
+			const { Username } = this.props.location.state;
+			temp_username = Username;
+			d = {username: Username};
+		}
 
-		today = mm + '-' + dd + '-' + yyyy;
-		
+		let today = getFormattedDate(new Date(Date.now()));
+
 		fetch(DI.DOMAIN + "/get_streaks", {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -111,7 +123,7 @@ render() {
 			{this.state.history_arr.map(item =>
 				<tr>
 					<td>{item.Name}</td>
-					<td>{item.Max_date}</td>
+					<td>{item.Max_date.substring(0,10)}</td>
 					<td>{item.total}</td>
 				</tr>
 			)}
