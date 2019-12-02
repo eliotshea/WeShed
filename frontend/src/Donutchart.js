@@ -109,7 +109,7 @@ export default class Donutchart extends Component {
   }
 
   render() {
-    return (<div> <h4>{this.state.temp_days_played} days played out of 365</h4>
+    return (<div> <br></br><br></br><br></br><br></br><br></br><br></br>{this.state.temp_days_played} days played out of 365
 	<Sketch setup={this.setup} draw={this.draw} /> 
 	<div>
 	<button onClick={this.fastForward}>Full Fast-forward</button>
