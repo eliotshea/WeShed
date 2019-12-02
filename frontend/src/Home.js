@@ -8,8 +8,17 @@ class Home extends Component {
   constructor(props){
     super(props);
     this.state = {
-      history_arr: []
+      history_arr: [],
+	  username2: '',
+	  userchallenge: '',
+	  message: ''
     }
+	
+	this.addFriend = this.addFriend.bind(this);
+	this.addChallenge = this.addChallenge.bind(this);
+	this.handleUserChange = this.handleUserChange.bind(this);
+	this.handleUserChallengeChange = this.handleUserChallengeChange.bind(this);
+	this.handleMsgChange = this.handleMsgChange.bind(this);
   }
 
   async componentDidMount(){
@@ -33,6 +42,77 @@ class Home extends Component {
     });
     
   }
+  
+  async addFriend(evt) {
+		evt.preventDefault();
+		
+		//To ensure that empty is never used for insertions to friends
+		if(this.state.username2 !== ''){
+			var temp_username = await Auth.getUser();
+
+			var data = {
+				username: temp_username,
+				username2: this.state.username2
+			}
+		
+			fetch(DI.DOMAIN + "/add_friend", {
+				method: 'POST',
+				headers: {'Content-Type': 'application/json'},
+				body: JSON.stringify(data)
+			}).then(function(response) {
+				if (response.status >= 400) {
+					throw new Error("Bad response from server");
+				}
+			}).catch(function(err) {
+				console.log(err)
+				});
+		}
+  }
+  
+  async addChallenge(evt) {
+		evt.preventDefault();
+		if(this.state.userchallenge !== ''){
+			var temp_username = await Auth.getUser();
+
+			var data = {
+				username: temp_username,
+				userchallenge: this.state.userchallenge,
+				message: this.state.message
+			}
+		
+			fetch(DI.DOMAIN + "/add_challenge", {
+				method: 'POST',
+				headers: {'Content-Type': 'application/json'},
+				body: JSON.stringify(data)
+			}).then(function(response) {
+				if (response.status >= 400) {
+					throw new Error("Bad response from server");
+				}
+			}).catch(function(err) {
+				console.log(err)
+				});
+		}
+  }
+  
+  handleUserChange(evt) {
+    this.setState({
+      username2: evt.target.value,
+    });
+  }
+  
+  handleUserChallengeChange(evt) {
+    this.setState({
+      userchallenge: evt.target.value,
+    });
+  }
+  
+  handleMsgChange(evt) {
+    this.setState({
+      message: evt.target.value,
+    });
+  }
+
+        
 
   render() {
 
@@ -69,8 +149,32 @@ class Home extends Component {
     
     return (
       <div className="Home">
+	  <h1>Home</h1>
         {recommendations}
         {history}
+		
+		
+		<div>
+		<form onSubmit={this.addFriend}>
+          <label>Username</label>
+          <input type="text" data-test="username2" value={this.state.username2} onChange={this.handleUserChange} />
+
+          <input type="submit" value="Add friend" data-test="submit" />
+        </form>
+		</div>
+		
+		<div>
+		<br></br>
+		<form onSubmit={this.addChallenge}>
+		  <h6><b>Challenge a User</b></h6>
+          <label>To:</label>
+          <input type="text" value={this.state.userchallenge} onChange={this.handleUserChallengeChange} />
+		  <label>Message:</label>
+		  <input type="text" data-test="message" value={this.state.message} onChange={this.handleMsgChange} />
+          <input type="submit" value="Add challenge" data-test="submit" />
+        </form>
+		</div>
+		
       </div>
 	  
     );

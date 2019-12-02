@@ -8,8 +8,25 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 
+router.post('/add_challenge', (req, res) => {
+	const mysql = 'INSERT INTO Challenges (Challenges.To, Challenges.From, Challenges.Message) VALUES (?,?,?)';
 
+	connection.query(mysql, [req.body.userchallenge, req.body.username, req.body.message], (err, results) => {
+			if(err){
+				console.log(err);
+			}
+	});
+});
 
+router.post('/add_friend', (req, res) => {
+	const mysql = 'INSERT INTO Friendships (Username, Username2) VALUES (?,?)';
+
+	connection.query(mysql, [req.body.username, req.body.username2], (err, results) => {
+			if(err){
+				console.log(err);
+			}
+	});
+});
 
 router.post('/get_play_session_count', (req, res) => {
 	const mysql = "SELECT COUNT(Date) as ps_count FROM Play_sessions WHERE Play_sessions.Username = ?";
