@@ -54,16 +54,18 @@ class Header extends Component {
            <div className="searchBar">  <Autocomplete
            suggestions={this.state.song_arr.concat(this.state.user_arr)}/>
            </div>
-            <Modal show={this.state.show} handleClose={this.hideModal} >
-              <h4>Are you sure?</h4>
-              <button onClick={this.getLogout}>Yes</button>
-            </Modal>
            <Link to='Login' className='logout' onClick={this.showModal}>Logout</Link>
       </div>
 
     return (
       <div>
        {header}
+
+       <Modal show={this.state.show} handleClose={this.hideModal} >
+         <h4>Are you sure you want to log out?</h4>
+         <button className="exitButtons" onClick={this.getLogout}>Yes</button>
+          &nbsp;
+       </Modal>
       </div>
     );
   }
@@ -76,7 +78,7 @@ const Modal = ({ handleClose, show, children }) => {
     <div className={showHideClassName}>
       <section className='modal-main' onClick={handleClose}>
         {children}
-        <button>No</button>
+        <button className="exitButtons">No</button>
       </section>
     </div>
   );
