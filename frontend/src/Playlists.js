@@ -10,7 +10,7 @@ function getFormattedDate(date) {
     let year = date.getFullYear();
     let month = (1 + date.getMonth()).toString().padStart(2, '0');
     let day = date.getDate().toString().padStart(2, '0');
-  
+
     return year + '-' + month + '-' + day;
  }
 
@@ -32,12 +32,12 @@ class Playlist extends Component {
 		this.delSong = this.delSong.bind(this);
 		this.delPlaylist = this.delPlaylist.bind(this);
 	}
-	
+
 	delSong(evt) {
 		evt.preventDefault();
 
         var data = { siid: this.state.curr_Siid }
-		
+
         fetch(DI.DOMAIN + "/del_playlist_song", {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -53,24 +53,24 @@ class Playlist extends Component {
 				alert("Successful deletion");
 			else
 				alert("Something went wrong");
-			
+
         }).catch(function(err) {
             console.log(err)
         });
-		
+
 		//Call a reset for song_arr refresh
 		this.resetState();
 
 	}
-	
+
 	async delPlaylist(evt) {
 		evt.preventDefault();
-		
+
 		var temp_username = await Auth.getUser();
 
         var data = { username: temp_username,
 					pname: this.state.curr_Pname}
-		
+
         fetch(DI.DOMAIN + "/del_playlist", {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -86,28 +86,28 @@ class Playlist extends Component {
 				alert("Successful deletions");
 			else
 				alert("Something went wrong");
-			
+
         }).catch(function(err) {
             console.log(err)
         });
-		
+
 		//Call a reset for song_arr refresh
 		this.resetState();
 
 	}
 
 	async componentDidMount(){
-		
+
 		var temp_username = await Auth.getUser();
 		var d = {username: temp_username};
-		
+
 		fetch(DI.DOMAIN + "/get_playlists_songs", {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(d)
         }).then(response => response.json())
 		.then(data => this.setState({ song_arr: data }));
-		
+
 	}
 
 	changeSong(song) {
@@ -123,12 +123,12 @@ class Playlist extends Component {
 	}
 
 	async resetState() {
-		
+
 		//Converting JS date info to format SQL likes
 		let timeElapsed = (Date.now() - this.state.timeStamp) / 1000;
 		let currentDate = getFormattedDate(new Date(Date.now()));
 
-		var tempMsid = parseInt(this.state.curr_Msid); 
+		var tempMsid = parseInt(this.state.curr_Msid);
 		var temp_username = await Auth.getUser();
 		var data = {
 			Msid: tempMsid,
@@ -141,8 +141,8 @@ class Playlist extends Component {
 			headers: {'Content-Type': 'application/json'},
 			body: JSON.stringify(data)
 		});
-		
-		
+
+
 		this.setState({
 			curr_Msid: '',
 			curr_Name: '',
@@ -152,9 +152,9 @@ class Playlist extends Component {
 			curr_Pname: '',
 			timeStamp: 0
 		})
-		
+
 		var d = {username: temp_username}
-		
+
 		fetch(DI.DOMAIN + "/get_playlists_songs", {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -162,8 +162,8 @@ class Playlist extends Component {
         }).then(response => response.json())
 		.then(info => this.setState({ song_arr: info }));
 	}
-	
-	
+
+
 
 
 render() {
@@ -179,7 +179,7 @@ render() {
 	}
 	let Del_song = null;
 	let Del_playlist = null;
-	
+
 	var prev_pname = '';
 	//The purpose of this function is to only print Playlist name once based on trailing pname
 	function Printsolopname(props){
@@ -192,14 +192,14 @@ render() {
 			return(null);
 		}
 	}
-	
+
 	let Playlist = ( <ul>
 		{song_arr.map(song =>
 			<li key={song.Siid} onClick={() => this.changeSong(song)}>
 		          <Printsolopname tsong = {song} />
-				  
-				  
-				  <button className="button">
+
+
+				  <button className="songButtons">
 					<img
 					style={{width: 200, height: 200}}
 					src={require(`${PREFIX_DIR}${song.F_handle}`)}
@@ -209,9 +209,9 @@ render() {
 			</li>
 		)}
 	</ul> );
-	
-	
-	
+
+
+
 	if(this.state.curr_F_handle && this.state.curr_Bt_ref) {
 		Playlist = <button onClick={this.resetState}>Choose another song</button>
 		Del_song = <button onClick={this.delSong}>Delete current song</button>
@@ -221,35 +221,39 @@ render() {
 
     return (
       <div className="Playlists">
-        <h1> Playlists page </h1>
-		
+
+      <div className="background">
+
+        <h1 className= "pageTitle"> Playlists page </h1>
+
 		<div>
 		{leadSheet}
 		{player}
 		</div>
-		
+
 		<div>
 		<br></br>
 		{Del_song}
 		</div>
-		
+
 		<div>
 		<br></br>
 		{Del_playlist}
 		</div>
-		
+
 		<div>
 		<br></br>
 		{Playlist}
 		</div>
-		
+
 		<div>
 		<h4>  <b>Playlist:</b> {this.state.curr_Pname} <br></br> <b>Current:</b> {this.state.curr_Name} </h4>
 		</div>
-		
+
       </div>
-		
-		
+      </div>
+
+
     );
   }
 }

@@ -28,7 +28,7 @@ export default class Stats extends Component {
 			wor_song_count: 0
 		};
 	}
-	
+
 	async componentDidMount(){
 		var obj;
 		var temp_username, d;
@@ -66,21 +66,21 @@ export default class Stats extends Component {
 		.then(() =>{
 			this.setState({history_arr: obj});
 		});
-		
+
 		fetch(DI.DOMAIN + '/get_gfav_song')
 		.then(response => response.json())
 		.then(data => {
 			if(data.length > 0)
 				this.setState({ gfav_song: data[0].Name, gfav_song_count: data[0].Max_count });
 		});
-		
+
 		fetch(DI.DOMAIN + '/get_gwor_song')
 		.then(response => response.json())
 		.then(data => {
 			if(data.length > 0)
 				this.setState({ gwor_song: data[0].Name, gwor_song_count: data[0].Min_count });
 		});
-		
+
 		fetch(DI.DOMAIN + "/get_fav_song", {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -90,7 +90,7 @@ export default class Stats extends Component {
 			if(data.length > 0)
 				this.setState({ fav_song: data[0].Name, fav_song_count: data[0].Max_count });
 		});
-		
+
 		fetch(DI.DOMAIN + "/get_wor_song", {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -100,7 +100,7 @@ export default class Stats extends Component {
 			if(data.length > 0)
 				this.setState({ wor_song: data[0].Name, wor_song_count: data[0].Min_count });
 		});
-	
+
 	}
 
 render() {
@@ -129,12 +129,20 @@ render() {
 			)}
 		</table>
 		);
-	
+
 let favSong = <h6><b>Global Favorite Song:</b> {this.state.gfav_song} played {this.state.gfav_song_count} times <b>Favorite Song:</b> {this.state.fav_song} played {this.state.fav_song_count} times</h6>
 let worSong = <h6><b>Global Least Played Song:</b> {this.state.gwor_song} played {this.state.gwor_song_count} times <b>Least Played Song:</b> {this.state.wor_song} played {this.state.wor_song_count} times</h6>
-	
+
     return (
       <div className="Stats">
+      <div className="background">
+
+      <div className="topStreaks">
+  		<h3>Top Streaks</h3>
+  		{history}
+  		{streakList}
+      </div>
+
 		<div className="headerCard">
 			<h1>{this.state.username}</h1>
 			<Levelbadge className="Levelbadge"/>
@@ -142,11 +150,11 @@ let worSong = <h6><b>Global Least Played Song:</b> {this.state.gwor_song} played
 			<p>Current streak: {this.state.current_streak}</p>
 		</div>
 		<Donutchart className="Donutchart"/>
+
 		{favSong}
 		{worSong}
-		<h3>Top Streaks</h3>
-		{history}
-		{streakList}
+
+      </div>
       </div>
     );
   }

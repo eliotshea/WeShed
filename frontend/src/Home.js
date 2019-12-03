@@ -13,7 +13,7 @@ class Home extends Component {
 	  userchallenge: '',
 	  message: ''
     }
-	
+
 	this.addFriend = this.addFriend.bind(this);
 	this.addChallenge = this.addChallenge.bind(this);
 	this.handleUserChange = this.handleUserChange.bind(this);
@@ -38,14 +38,14 @@ class Home extends Component {
         leastfavorite: obj.slice(-1)[0].Name,
         favorite: obj[0].Name
       });
-      
+
     });
-    
+
   }
-  
+
   async addFriend(evt) {
 		evt.preventDefault();
-		
+
 		//To ensure that empty is never used for insertions to friends
 		if(this.state.username2 !== ''){
 			var temp_username = await Auth.getUser();
@@ -54,7 +54,7 @@ class Home extends Component {
 				username: temp_username,
 				username2: this.state.username2
 			}
-		
+
 			fetch(DI.DOMAIN + "/add_friend", {
 				method: 'POST',
 				headers: {'Content-Type': 'application/json'},
@@ -68,7 +68,7 @@ class Home extends Component {
 				});
 		}
   }
-  
+
   async addChallenge(evt) {
 		evt.preventDefault();
 		if(this.state.userchallenge !== ''){
@@ -79,7 +79,7 @@ class Home extends Component {
 				userchallenge: this.state.userchallenge,
 				message: this.state.message
 			}
-		
+
 			fetch(DI.DOMAIN + "/add_challenge", {
 				method: 'POST',
 				headers: {'Content-Type': 'application/json'},
@@ -93,26 +93,26 @@ class Home extends Component {
 				});
 		}
   }
-  
+
   handleUserChange(evt) {
     this.setState({
       username2: evt.target.value,
     });
   }
-  
+
   handleUserChallengeChange(evt) {
     this.setState({
       userchallenge: evt.target.value,
     });
   }
-  
+
   handleMsgChange(evt) {
     this.setState({
       message: evt.target.value,
     });
   }
 
-        
+
 
   render() {
 
@@ -146,14 +146,15 @@ class Home extends Component {
       <h6>I would recommend playing {this.state.leastfavorite}, your least played song</h6>
       <h6>Or relax with your favorite, {this.state.favorite}</h6>
     </div>
-    
+
     return (
       <div className="Home">
-	  <h1>Home</h1>
+      <div className="background">
+	  <h1 className= "pageTitle">Home</h1>
         {recommendations}
         {history}
-		
-		
+
+
 		<div>
 		<form onSubmit={this.addFriend}>
           <label>Username</label>
@@ -162,7 +163,7 @@ class Home extends Component {
           <input type="submit" value="Add friend" data-test="submit" />
         </form>
 		</div>
-		
+
 		<div>
 		<br></br>
 		<form onSubmit={this.addChallenge}>
@@ -174,9 +175,10 @@ class Home extends Component {
           <input type="submit" value="Add challenge" data-test="submit" />
         </form>
 		</div>
-		
+
       </div>
-	  
+      </div>
+
     );
   }
 }

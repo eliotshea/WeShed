@@ -211,7 +211,7 @@ render() {
               <input type="text" data-test="text" value={this.state.Pname} onChange={this.handlePnameChange} />
     		      <input type="submit" value="Add to playlist" data-test="submit" />
     		  </form>
-
+          &nbsp;
           <form ref="form">
             <input id="input"
               type="text"
