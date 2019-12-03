@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import Auth from './Auth';
 import './App.css';
 import './profile.css'
-import UserProfile from 'react-user-profile';
+import { Grid, Cell } from 'react-mdl'
 import firebase from 'firebase/app';
 import 'firebase/storage';
 
@@ -13,12 +13,27 @@ class Profile extends Component {
 	constructor() {
 		super();
 		this.state = {
-			username: null,
+			fullName: null,
+			userName: null,
 			image: null,
-			url: ''
+			url: 'https://icon-library.net/images/default-profile-icon/default-profile-icon-24.jpg',
+			fullName: 'John Doe',
+			location: 'USA',
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleUpload = this.handleUpload.bind(this);
+	}
+
+	changeName(e){
+		this.setState({
+		 fullName: e.target.value
+	 });
+	}
+
+	changeLocation(e){
+		this.setState({
+		 location: e.target.value
+	 });
 	}
 
 	getToken(){
@@ -57,35 +72,52 @@ class Profile extends Component {
 	}
 
   render() {
-		const userName = 'First Last'
-		const location = 'USA'
 
-		const comments = [
-			{
-				id: '0',
-				photo: '',
-				userName: '',
-				content: '',
-				createdAt: 0
-			}
-		]
-    return (
+		const userName = "coolguy99"
+
+  return (
+			<div className="background">
       <div className="Profile">
-				<div style={{ margin: '0 auto', width: '100%' }}>
-	        <UserProfile photo={this.state.url} userName={userName} location={location} initialLikesCount={0} initialFollowingCount={0} initialFollowersCount={0} initialComments={comments} />
+			<div style={{width: '100%', margin: 'auto'}}>
+			<Grid className="ProfLay">
+			<Cell col={12}>
+			<img src={this.state.url}
+			alt="Profile Picture"
+			className="avatar-img"/>
+			<div className="banner">
+			<h1>{this.state.fullName}</h1>
+			<h2>{this.state.location}</h2>
+			<h3>@{userName}</h3>
+			</div>
+			</Cell>
+			</Grid>
+			</div>
 					<div className="changepic">
-					<h1> Change profile picture </h1>
+					<h1 className="changepic">Edit Profile</h1>
 					</div>
-					<progress value={this.state.progress} max="100"/>
 					<input type="file" onChange={this.handleChange}/>
 					<button onClick={this.handleUpload}>Upload</button>
-	      </div>
+					<div/>
+					<input
+		 type="text"
+		 value={this.state.fullName}
+		 onChange={e => this.changeName(e)}
+		/>
+		<div/>
+		<input
+type="text"
+value={this.state.location}
+onChange={e => this.changeLocation(e)}
+/>
+<div/>
+
 		<button onClick={this.getToken}>
 			getToken
 		</button>
 		<button onClick={this.getU}>
 			getUser
 		</button>
+		</div>
       </div>
 
     );

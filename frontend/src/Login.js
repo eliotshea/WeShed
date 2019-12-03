@@ -7,7 +7,6 @@ import Cookies from 'js-cookie';
 import logo from './weshedlogo.png';
 import './loginpage.css';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
-import { FacebookLoginButton } from 'react-social-login-buttons';
 
 
 class Login extends Component {
@@ -25,13 +24,13 @@ class Login extends Component {
 
   handleSubmit(evt) {
     evt.preventDefault();
-	
+
 
         var data = {
             username: this.state.username,
             password: this.state.password
         }
-		
+
         fetch(DI.DOMAIN + "/auth", {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -45,15 +44,15 @@ class Login extends Component {
 			//Response from the verified /auth POST
 			Cookies.set('mytoken', response.token, { expires: 14, domain: DI.DOMAIN_NAME}); //Create a cookie to expire in 2 weeks
 			alert(response.token);
-			
+
         }).catch(function(err) {
             console.log(err)
         });
 
   }
-  
+
   getLogout(){
-	  Auth.signout(); 
+	  Auth.signout();
   }
 
   handleUserChange(evt) {
@@ -102,18 +101,14 @@ class Login extends Component {
 		</div>
     </div>
     </div>
-		
 
-		
+
+
       </div>
-	  
-	  
+
+
     );
   }
 }
 
 export default Login;
-
-
-
-
