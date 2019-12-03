@@ -3,7 +3,7 @@ import DI from './config/domain_info';
 import ReactPlayer from 'react-player';
 import PropTypes from 'prop-types';
 import Auth from './Auth';
-import './SearchPage.css';
+
 
 //Referenced:
 //https://medium.com/@imranhsayed/live-search-with-react-instant-search-pagination-6acd476af756

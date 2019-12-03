@@ -1,3 +1,4 @@
+
 .App {
   text-align: center;
 }
@@ -21,6 +22,20 @@
   color: #09d3ac;
 }
 
+
+/*search bar*/
+.field {
+  width: 30%;
+  height: 25px;
+  border-radius: 20px;
+  position: fixed;
+  top: 1.5%;
+  left: 35%;
+  right: 35%;
+  background-color: rgba(4, 11, 12, 0.1);
+  transition: 0.3s all;
+}
+
 .field input {
   width: 96%;
   height: 25px;
@@ -40,6 +55,23 @@
     0.1s padding ease-in-out;
 }
 
+.field:hover {
+  background-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.05);
+}
+.field.active {
+  background-color: #ffffff;
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.2);
+}
+.field.active input::-webkit-input-placeholder {
+  color: rgba(69, 73, 64, 0.6);
+}
+.field input::-webkit-input-placeholder {
+  color: rgba(204, 190, 190, 0.514);
+}
+
+
+/*header*/
 .Header {
   background-color: #333;
   overflow: hidden;
@@ -47,7 +79,7 @@
   position: fixed;
   top:0;
   left:0;
-  width: 100%;    
+  width: 100%;
 }
 
 
@@ -65,6 +97,64 @@
   background-color: #ddd;
   color: black;
 }
+
+
+/*song Listings*/
+ul, li {
+    list-style-type: none;
+}
+
+li {
+    padding-left: 0;
+    margin-left: 0;
+}
+
+li button {
+    margin-top: 1em;
+    margin-right: 1em;
+}
+
+.songDisplay{
+  margin-top:1%;
+}
+
+.songList{
+   float: left;
+}
+
+.songButtons{
+  background-color: rgba(0,42,87,0.5);
+  border-radius: 5px;
+  border: none;
+  color: white;
+  padding: 25px 30px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.songButtons:hover{
+  background-color: rgba(0, 59, 122, 1);
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.05);
+}
+
+
+.sheet{
+  float:left;
+  margin-left: 10%;
+}
+
+.player{
+  float:right;
+  margin-right: 10%;
+}
+
+
+/*page titles (songs, playlist)*/
+.pageTitle{
+  
+}
+
 
 /* Add a color to the active/current link */
 .Header a.active {
@@ -128,5 +218,3 @@
 .Donutchart {
   float: left;
 }
-
-
