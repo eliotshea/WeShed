@@ -127,10 +127,8 @@ class Playlist extends Component {
 		//Converting JS date info to format SQL likes
 		let timeElapsed = (Date.now() - this.state.timeStamp) / 1000;
 		let currentDate = getFormattedDate(new Date(Date.now()));
-		alert(`You spent ${timeElapsed} seconds playing ${this.state.curr_Name}`); 
-		alert(new Date(timeElapsed * 1000).toISOString().substr(11, 8));
+
 		var tempMsid = parseInt(this.state.curr_Msid); 
-		alert(currentDate);
 		var temp_username = await Auth.getUser();
 		var data = {
 			Msid: tempMsid,
@@ -173,11 +171,11 @@ render() {
 	const {song_arr} = this.state;
 	let player = null;
 	if(this.state.curr_Bt_ref){
-		player = <center><ReactPlayer url={this.state.curr_Bt_ref} controls="true" /> </center>
+		player = <center><ReactPlayer className="player" url={this.state.curr_Bt_ref} controls="true" /> </center>
 	}
 	let leadSheet = null;
 	if(this.state.curr_F_handle){
-		leadSheet = <center><img src={require(`${PREFIX_DIR}${this.state.curr_F_handle}`)} /></center>
+		leadSheet = <center><img className="sheet" src={require(`${PREFIX_DIR}${this.state.curr_F_handle}`)} /></center>
 	}
 	let Del_song = null;
 	let Del_playlist = null;
@@ -199,10 +197,20 @@ render() {
 		{song_arr.map(song =>
 			<li key={song.Siid} onClick={() => this.changeSong(song)}>
 		          <Printsolopname tsong = {song} />
-				  <b>Siid: {song.Siid} Msid: {song.Msid} {song.Name} {song.F_handle} {song.Bt_ref} </b>
+				  
+				  
+				  <button className="button">
+					<img
+					style={{width: 200, height: 200}}
+					src={require(`${PREFIX_DIR}${song.F_handle}`)}
+					/>
+					<p>{song.Name}</p>
+				  </button>
 			</li>
 		)}
 	</ul> );
+	
+	
 	
 	if(this.state.curr_F_handle && this.state.curr_Bt_ref) {
 		Playlist = <button onClick={this.resetState}>Choose another song</button>
@@ -222,11 +230,21 @@ render() {
 		
 		<div>
 		<br></br>
-		{Del_song} {Del_playlist} {Playlist}
+		{Del_song}
 		</div>
 		
 		<div>
-		<h4> <b>Current:</b> Siid: {this.state.curr_Siid} Msid: {this.state.curr_Msid} {this.state.curr_Name} {this.state.curr_F_handle} {this.state.curr_Bt_ref} Pname: {this.state.curr_Pname}</h4>
+		<br></br>
+		{Del_playlist}
+		</div>
+		
+		<div>
+		<br></br>
+		{Playlist}
+		</div>
+		
+		<div>
+		<h4>  <b>Playlist:</b> {this.state.curr_Pname} <br></br> <b>Current:</b> {this.state.curr_Name} </h4>
 		</div>
 		
       </div>

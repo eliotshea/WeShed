@@ -21,10 +21,33 @@
   color: #09d3ac;
 }
 
+.field input {
+  width: 96%;
+  height: 25px;
+  left: 4px;
+  position: relative;
+  border: none;
+  border-radius: 4px;
+  font-family: "Gotham SSm A", "Gotham SSm B", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  background-color: transparent;
+  color: #282828;
+  outline: none;
+  box-shadow: 0px 4px 20px 0px transparent;
+  transition: 0.3s background-color ease-in-out, 0.3s box-shadow ease-in-out,
+    0.1s padding ease-in-out;
+}
+
 .Header {
   background-color: #333;
   overflow: hidden;
   display: flex;
+  position: fixed;
+  top:0;
+  left:0;
+  width: 100%;    
 }
 
 
@@ -48,3 +71,62 @@
   background-color: #4CAF50;
   color: white;
 }
+
+.searchBar {
+  position: absolute;
+  left: 40em;
+}
+
+.suggestions {
+  border: 1px solid #999;
+  border-top-width: 0;
+  font-family: "Gotham SSm A", "Gotham SSm B", sans-serif;
+  list-style: none;
+  margin-top: 0;
+  max-height: 143px;
+  overflow-y: auto;
+  padding-left: 0;
+  width: auto;
+}
+
+.suggestions li {
+  padding: 0.5rem;
+}
+
+.suggestion-active,
+.suggestions li:hover {
+  background-color: #008f68;
+  color: #1488CC;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.sheet{
+  float:left;
+  margin-left: 10%;
+}
+
+.player{
+  float:right;
+  margin-right: 10%;
+}
+
+.headerCard {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  margin: auto;
+  text-align: center;
+  float: left;
+}
+
+.Stats {
+  margin-top: 3em;
+}
+.History {
+  float: center
+}
+.Donutchart {
+  float: left;
+}
+
+

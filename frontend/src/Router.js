@@ -7,6 +7,8 @@ import Songs from './Songs';
 import Profile from './Profile';
 import Register from './Register';
 import Auth from './Auth';
+import Stats from './Stats';
+import SearchPage from './SearchPage';
 
 const Router = (props) => (
     <Switch>
@@ -17,6 +19,8 @@ const Router = (props) => (
 	  <PrivateRoute path="/Playlists" component={Playlists} />
 	  <PrivateRoute path="/Songs" component={Songs} />
 	  <PrivateRoute path="/Profile" component={Profile} />
+	  <PrivateRoute path="/Stats" component={Stats} />
+    <PrivateRoute path='/Search' component={SearchPage}/>
     </Switch>
 )
 

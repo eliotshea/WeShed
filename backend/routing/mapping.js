@@ -7,6 +7,155 @@ const connection = require('../mysql/mysql_setup'); //Grab the connection handle
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
+
+router.post('/add_challenge', (req, res) => {
+	const mysql = 'INSERT INTO Challenges (Challenges.To, Challenges.From, Challenges.Message) VALUES (?,?,?)';
+
+	connection.query(mysql, [req.body.userchallenge, req.body.username, req.body.message], (err, results) => {
+			if(err){
+				console.log(err);
+			}
+	});
+});
+
+router.post('/add_friend', (req, res) => {
+	const mysql = 'INSERT INTO Friendships (Username, Username2) VALUES (?,?)';
+
+	connection.query(mysql, [req.body.username, req.body.username2], (err, results) => {
+			if(err){
+				console.log(err);
+			}
+	});
+});
+
+router.post('/get_play_session_count', (req, res) => {
+	const mysql = "SELECT COUNT(Date) as ps_count FROM Play_sessions WHERE Play_sessions.Username = ?";
+
+	connection.query(mysql, [req.body.username], (err, results) => {
+			if(err){
+				console.log(err);
+				res.send(err);
+			}
+			else{
+				console.log(results);
+				res.json(results);
+			}
+	});
+});
+
+router.post('/get_days_played', (req, res) => {
+	const mysql = "SELECT DISTINCT COUNT(Date) as days_played FROM Play_sessions WHERE Play_sessions.Username = ?";
+
+	connection.query(mysql, [req.body.username], (err, results) => {
+			if(err){
+				console.log(err);
+				res.send(err);
+			}
+			else{
+				console.log(results);
+				res.json(results);
+			}
+	});
+});
+
+router.post('/get_streaks', (req, res) => {
+	//Referenced https://jaxenter.com/10-sql-tricks-that-you-didnt-think-were-possible-125934.html for querying consecutive days
+	const mysql = "WITH ps_dates AS (SELECT DISTINCT Date as ps_date FROM Play_sessions WHERE Username = ?),"
+	+ " ps_date_groups AS ( SELECT ps_date, ps_date - row_number() OVER (ORDER BY ps_date) AS grp FROM ps_dates )"
+	+ " SELECT min(ps_date) AS Psmin, max(ps_date) AS Psmax, max(ps_date) - min(ps_date) + 1 AS length FROM ps_date_groups GROUP BY grp ORDER BY length DESC";
+
+	connection.query(mysql, [req.body.username], (err, results) => {
+		if(err){
+			console.log(err);
+			results.send(err);
+		}
+		else{
+			console.log(results);
+			res.json(results);
+		}
+	});
+});
+
+//Global favorite song
+router.get('/get_gfav_song', (req, res) => {
+	const mysql = "SELECT * FROM (SELECT Msid, COUNT(Msid) as Max_count FROM Play_sessions GROUP BY Msid) as The_max"
+	+ " INNER JOIN Master_songs ON Master_songs.Msid = The_max.Msid ORDER BY Max_count DESC LIMIT 1";
+
+	connection.query(mysql, (err, results) => {
+			if(err){
+				console.log(err);
+				res.send(err);
+			}
+			else{
+				console.log(results);
+				res.json(results);
+			}
+	});
+});
+
+//Global least played song
+router.get('/get_gwor_song', (req, res) => {
+	const mysql = "SELECT * FROM (SELECT Msid, COUNT(Msid) as Min_count FROM Play_sessions GROUP BY Msid) as The_min"
+	+ " INNER JOIN Master_songs ON Master_songs.Msid = The_min.Msid ORDER BY Min_count LIMIT 1";
+
+	connection.query(mysql, (err, results) => {
+			if(err){
+				console.log(err);
+				res.send(err);
+			}
+			else{
+				console.log(results);
+				res.json(results);
+			}
+	});
+});
+
+router.post('/get_fav_song', (req, res) => {
+	const mysql = "SELECT * FROM (SELECT Msid, COUNT(Msid) as Max_count FROM Play_sessions WHERE Play_sessions.Username = ? GROUP BY Msid) as The_max"
+	+ " INNER JOIN Master_songs ON Master_songs.Msid = The_max.Msid ORDER BY Max_count DESC LIMIT 1";
+
+	connection.query(mysql, [req.body.username], (err, results) => {
+			if(err){
+				console.log(err);
+				res.send(err);
+			}
+			else{
+				console.log(results);
+				res.json(results);
+			}
+	});
+});
+
+router.post('/get_wor_song', (req, res) => {
+	const mysql = "SELECT * FROM (SELECT Msid, COUNT(Msid) as Min_count FROM Play_sessions WHERE Play_sessions.Username = ? GROUP BY Msid) as The_min"
+	+ " INNER JOIN Master_songs ON Master_songs.Msid = The_min.Msid ORDER BY Min_count LIMIT 1";
+
+	connection.query(mysql, [req.body.username], (err, results) => {
+			if(err){
+				console.log(err);
+				res.send(err);
+			}
+			else{
+				console.log(results);
+				res.json(results);
+			}
+	});
+});
+
+router.post('/get_history', (req, res) =>{
+	const mysql = "select Master_songs.Name, Master_songs.Bt_ref, Master_songs.F_handle, Master_songs.Msid, results.Max_date, results.total FROM Master_songs INNER JOIN (select Play_sessions.Msid, MAX(Play_sessions.Date) as Max_date, SEC_TO_TIME(SUM(TIME_TO_SEC(Time_played))) As total FROM Play_sessions WHERE Username = ? group By Msid) AS results ON results.Msid = Master_songs.Msid order by total DESC";
+
+	connection.query(mysql, [req.body.username], (err, results) => {
+		if(err){
+			console.log(err);
+			res.send(err);
+		} else {
+			console.log(results);
+			res.json(results);
+		}
+	});
+});
+
 router.post('/del_playlist', (req, res) => {
 	connection.query('DELETE FROM Song_instances WHERE Song_instances.Username = ? AND Song_instances.Pname = ?', [req.body.username, req.body.pname], (err, results) => {
 			if(err){
@@ -32,13 +181,13 @@ router.post('/del_playlist_song', (req, res) => {
 });
 
 router.post('/add_song_to_playlist', (req, res) => {
-	
+
 	const pname = req.body.pname;
 	const username = req.body.username;
 	const msid = req.body.msid;
-	
+
 	console.log(pname, username, msid);
-	
+
 	connection.query('INSERT INTO Song_instances (Pname, Username, Msid) VALUES (?,?,?)'
 		, [pname,username,msid], (err) => {
 			if(err){
@@ -53,7 +202,7 @@ router.post('/add_song_to_playlist', (req, res) => {
 });
 
 router.post('/get_playlists_songs', (req, res) => {
-	
+
 	//Get all of the users songs
 	connection.query('SELECT * FROM Song_instances INNER JOIN Master_songs ON Song_instances.Msid = Master_songs.Msid WHERE Song_instances.Username = ? ORDER BY Pname',
 					 [req.body.username], (err, results) => {
@@ -63,7 +212,7 @@ router.post('/get_playlists_songs', (req, res) => {
 			}
 			else{
 				console.log(results);
-				res.send(JSON.stringify(results));
+				res.json(results);
 			}
 	});
 });
@@ -75,7 +224,7 @@ router.post('/create_play_session', (req, res) => {
 	const currentDate = req.body.currentDate;
 
 	console.log(Msid, Username, Time_played, currentDate)
-	connection.query('INSERT INTO Play_sessions (Msid, Username, Time_played, Date) VALUES (?,?,?,?)', 
+	connection.query('INSERT INTO Play_sessions (Msid, Username, Time_played, Date) VALUES (?,?,?,?)',
 		[Msid, Username, Time_played, currentDate], (err) => {
 			if(err){
 				console.log(err);
@@ -88,11 +237,37 @@ router.post('/create_play_session', (req, res) => {
 		});
 });
 
-router.get('/get_songs', (res) => {
+router.get('/get_songs', (req, res) => {
 	connection.query('SELECT * FROM Master_songs', (err, results) => {
 		if(err){
 			console.log(err);
-			res.send(err);
+			results.send(err);
+		}
+		else{
+			console.log(results);
+			res.send(JSON.stringify(results));
+		}
+	});
+});
+
+router.get('/get_users', (req, res) => {
+	connection.query('SELECT * FROM Users', (err, results) => {
+		if(err){
+			console.log(err);
+			results.send(err);
+		}
+		else{
+			console.log(results);
+			res.send(JSON.stringify(results));
+		}
+	});
+});
+
+router.get('/get_usernames', (req, res) => {
+	connection.query('SELECT DISTINCT Username AS Name FROM Users', (err, results) => {
+		if(err){
+			console.log(err);
+			results.send(err);
 		}
 		else{
 			console.log(results);
@@ -113,19 +288,36 @@ router.post('/get_user_stats', (req, res) => {
 	})
 })
 
+router.post('/get_user_play_sessions', (req, res) => {
+	connection.query('SELECT CAST (Date AS CHAR) FROM Play_sessions WHERE Username = ? GROUP BY Date', [req.body.Username], (err, results) =>{
+		if(err){
+			console.log(err);
+			res.send(err);
+		}else{
+			console.log(results);
+			dateArray = [];
+			for (var i in results) {
+				dateArray.push(results[i]['CAST (Date AS CHAR)']);
+			}
+			console.log(dateArray);
+			res.send(dateArray);
+		}
+	})
+})
+
 
 //Referenced: https://codeshack.io/basic-login-system-nodejs-express-mysql/
 router.post('/register', (req, res) => {
-	
+
 	const username = req.body.username;
 	const FORMULA_KEY = username + PASS_KEY + SALT + username + SALT + SALT; //To ensure same passwords are stored w different vals
 	const password = crypto.pbkdf2Sync(req.body.password, FORMULA_KEY, 100000, 64, 'sha512').toString('hex');
 	const email = req.body.email;
 	const fname = req.body.fname;
 	const lname = req.body.lname;
-	
+
 	console.log(username, password, email, fname, lname);
-	
+
 	connection.query('INSERT INTO Users (Username, Password, Email, Fname, Lname) VALUES (?,?,?,?,?)'
 		, [username,password,email,fname,lname], (err) => {
 			if(err){
@@ -142,11 +334,9 @@ router.post('/register', (req, res) => {
 		, [username], (err) => {
 			if(err){
 				console.log(err);
-				res.json({success:false});
 			}
 			else{
 				console.log("Success inserting " + username);
-				res.json({success:true});
 			}
 		});
 });
@@ -154,13 +344,13 @@ router.post('/register', (req, res) => {
 
 //Referenced: https://codeshack.io/basic-login-system-nodejs-express-mysql/
 router.post('/auth', (req, res) => {
-	
+
 	const username = req.body.username;
 	const FORMULA_KEY = username + PASS_KEY + SALT + username + SALT + SALT; //To ensure same passwords are stored w different vals
 	const password = crypto.pbkdf2Sync(req.body.password, FORMULA_KEY, 100000, 64, 'sha512').toString('hex');
-	
+
 	console.log("\nreceived: " + username, password + '\n');
-	
+
 	if(username && password) {
 		connection.query('SELECT * FROM Users WHERE Username = ? AND Password = ?', [username, password], (err, results, fields) => {
 			if (results.length > 0) {
@@ -182,7 +372,7 @@ router.post('/auth', (req, res) => {
 					token: null,
 					err: 'Username or password is incorrect'
 				});
-				
+
 			  }
 		});
 	}
@@ -226,8 +416,6 @@ router.get('/verify', checkToken, (req, res) => {
             }
         })
 });
-
-
 
 //Expose the routing to the app
 module.exports = router;
