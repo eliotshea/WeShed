@@ -159,7 +159,6 @@ class songList extends Component {
 	  alert('info: ' + this.state.curr_Msid)
 	}
 
-
 //search
   handleOnInputChange = (event) => {
   	const songName = event.target.value;
@@ -177,14 +176,14 @@ render() {
 	}
 	let leadSheet = <p></p>;
 	if(this.state.curr_F_handle){
-		leadSheet = <center><img className="sheet" src={require(`${PREFIX_DIR}${this.state.curr_F_handle}`)} /></center>
+		leadSheet = <center><img className="sheet" src={require(`${PREFIX_DIR}${this.state.curr_F_handle}`)}/></center>
 	}
 
   let songList = (<ul>
    {song_arr.map((song) =>{
      if(song.Name.toLowerCase().substr(0,songName.length) == songName.toLowerCase()){
-      return(<li className="songs" key={song.Msid} onClick={() => this.changeSong(song)}>
-        <button className="button">
+      return(<li className="songList" key={song.Msid} onClick={() => this.changeSong(song)}>
+        <button className="songButtons">
           <img
             style={{width: 200, height: 200}}
             src={require(`${PREFIX_DIR}${song.F_handle}`)}
@@ -201,33 +200,38 @@ render() {
 
     return (
       <div className="Songs">
+
+      <div className="background">
+
+      <div className="pageTitle">
         <h1> Songs page </h1>
 
-		<form onSubmit={this.handleSubmit}>
-		<label>Playlist Name:</label>
-        <input type="text" data-test="text" value={this.state.Pname} onChange={this.handlePnameChange} />
-		<input type="submit" value="Add to playlist" data-test="submit" />
-		</form>
+    		  <form onSubmit={this.handleSubmit}>
+    		    <label>Playlist Name:</label>
+              <input type="text" data-test="text" value={this.state.Pname} onChange={this.handlePnameChange} />
+    		      <input type="submit" value="Add to playlist" data-test="submit" />
+    		  </form>
 
-    <div className="songSearch">
-      <form ref="form">
-        <input id="input"
-        type="text"
-        placeholder="Search for song..."
-        onChange={this.handleOnInputChange}
-        />
-      </form>
-    </div>
+          <form ref="form">
+            <input id="input"
+              type="text"
+              placeholder="Search for song..."
+              onChange={this.handleOnInputChange}
+            />
+        </form>
+      </div>
 
+  		<div>
+    		{leadSheet}
+    		{player}
+  		</div>
 
-		<div>
-		{leadSheet}
-		{player}
-		</div>
-		{songList}
-      	</div>
+      <div className="songDisplay">
+		  {songList}
+      </div>
 
-
+      </div>
+      </div>
     );
   }
 }
