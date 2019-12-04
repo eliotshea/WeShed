@@ -8,14 +8,44 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 
-router.post('/add_challenge', (req, res) => {
-	const mysql = 'INSERT INTO Challenges (Challenges.To, Challenges.From, Challenges.Message) VALUES (?,?,?)';
+router.post('/get_challenges', (req, res) => {
+	const mysql = "SELECT * FROM Challenges WHERE Challenges.To = ?";
 
-	connection.query(mysql, [req.body.userchallenge, req.body.username, req.body.message], (err, results) => {
+	connection.query(mysql, [req.body.username], (err, results) => {
+			if(err){
+				console.log(err);
+				res.send(err);
+			}
+			else{
+				console.log(results);
+				res.json(results);
+			}
+	});
+});
+
+router.post('/get_friends', (req, res) => {
+	const mysql = "SELECT DISTINCT Username2 FROM Friendships WHERE Username = ?";
+
+	connection.query(mysql, [req.body.username], (err, results) => {
+			if(err){
+				console.log(err);
+				res.send(err);
+			}
+			else{
+				console.log(results);
+				res.json(results);
+			}
+	});
+});
+
+router.post('/add_challenge', (req, res) => {
+	const mysql = 'INSERT INTO Challenges (Challenges.To, Challenges.From, Challenges.Message, Challenges.Plays) VALUES (?,?,?,?)';
+
+	connection.query(mysql, [req.body.userchallenge, req.body.username, req.body.message, req.body.plays], (err, results) => {
 			if(err){
 				console.log(err);
 			}
-	});
+		});
 });
 
 router.post('/add_friend', (req, res) => {
