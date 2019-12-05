@@ -171,7 +171,7 @@ render() {
 	const {song_arr} = this.state;
 	let player = null;
 	if(this.state.curr_Bt_ref){
-		player = <center><ReactPlayer className="player" url={this.state.curr_Bt_ref} controls="true" /> </center>
+		player = <center><ReactPlayer url={this.state.curr_Bt_ref} controls="true" /> </center>
 	}
 	let leadSheet = null;
 	if(this.state.curr_F_handle){
@@ -220,31 +220,33 @@ render() {
 
 
     return (
-      <div className="Playlists">
-
       <div className="background">
+      <div className="Playlists">
 
         <h1 className= "pageTitle"> Playlists page </h1>
 
-		<div>
+		<div className="sheet">
 		{leadSheet}
+    </div>
+
+    <div className="player">
 		{player}
 		</div>
 
-		<div>
-		<br></br>
-		{Del_song}
-		</div>
+    <div>
+    <br></br>
+    {Del_song}
+    </div>
 
-		<div>
-		<br></br>
-		{Del_playlist}
-		</div>
+    <div>
+    <br></br>
+    {Del_playlist}
+    </div>
 
-		<div>
-		<br></br>
-		{Playlist}
-		</div>
+    <div>
+    <br></br>
+    {Playlist}
+    </div>
 
 		<div>
 		<h4>  <b>Playlist:</b> {this.state.curr_Pname} <br></br> <b>Current:</b> {this.state.curr_Name} </h4>

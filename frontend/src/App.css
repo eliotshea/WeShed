@@ -140,20 +140,24 @@ li button {
 }
 
 
+/*sheet and player layout*/
+
 .sheet{
   float:left;
-  margin-left: 10%;
 }
 
 .player{
   float:right;
-  margin-right: 10%;
+  margin-left: 2%;
 }
 
 
-/*page titles (songs, playlist)*/
-.pageTitle{
-  margin-top: 4%;
+.Songs{
+  margin-top: 2em;
+}
+
+.Playlists{
+  margin-top: 1em;
 }
 
 

@@ -199,9 +199,9 @@ render() {
 
 
     return (
-      <div className="Songs">
 
       <div className="background">
+      <div className="Songs">
 
       <div className="pageTitle">
         <h1> Songs page </h1>

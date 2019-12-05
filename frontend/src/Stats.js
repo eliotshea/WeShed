@@ -135,7 +135,7 @@ let worSong = <h6><b>Global Least Played Song:</b> {this.state.gwor_song} played
 
     return (
 
-      <div className="background stats">
+      <div className="background">
       <div className="Stats">
 
 		<div className="headerCard">
