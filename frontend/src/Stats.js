@@ -134,14 +134,9 @@ let favSong = <h6><b>Global Favorite Song:</b> {this.state.gfav_song} played {th
 let worSong = <h6><b>Global Least Played Song:</b> {this.state.gwor_song} played {this.state.gwor_song_count} times <b>Least Played Song:</b> {this.state.wor_song} played {this.state.wor_song_count} times</h6>
 
     return (
-      <div className="Stats">
-      <div className="background">
 
-      <div className="topStreaks">
-  		<h3>Top Streaks</h3>
-  		{history}
-  		{streakList}
-      </div>
+      <div className="background stats">
+      <div className="Stats">
 
 		<div className="headerCard">
 			<h1>{this.state.username}</h1>
@@ -149,10 +144,19 @@ let worSong = <h6><b>Global Least Played Song:</b> {this.state.gwor_song} played
 			<p>Longest streak: {this.state.max_streak}</p>
 			<p>Current streak: {this.state.current_streak}</p>
 		</div>
-		<Donutchart className="Donutchart"/>
 
-		{favSong}
-		{worSong}
+
+    <div  className="Donutchart">
+  		<Donutchart/>
+  		{favSong}
+  		{worSong}
+    </div>
+
+    <div className="topStreaks">
+  		<h3>Top Streaks</h3>
+  		{history}
+  		{streakList}
+    </div>
 
       </div>
       </div>
