@@ -6,6 +6,7 @@ import './profile.css'
 import { Grid, Cell } from 'react-mdl'
 import firebase from 'firebase/app';
 import 'firebase/storage';
+import DI from './config/domain_info';
 
 
 class Profile extends Component {
@@ -14,7 +15,7 @@ class Profile extends Component {
 		super();
 		this.state = {
 			fullName: null,
-			userName: null,
+			userName: 'coolguy99',
 			image: null,
 			url: 'https://icon-library.net/images/default-profile-icon/default-profile-icon-24.jpg',
 			fullName: 'John Doe',
@@ -28,6 +29,13 @@ class Profile extends Component {
 		this.setState({
 		 fullName: e.target.value
 	 });
+	}
+
+	async componentDidMount(){
+		var usertemp = await Auth.getUser()
+		this.setState({
+		 userName: usertemp,
+	 })
 	}
 
 	changeLocation(e){
@@ -73,8 +81,6 @@ class Profile extends Component {
 
   render() {
 
-		const userName = "coolguy99"
-
   return (
 			<div className="background">
       <div className="Profile">
@@ -85,9 +91,8 @@ class Profile extends Component {
 			alt="Profile Picture"
 			className="avatar-img"/>
 			<div className="banner">
-			<h1>{this.state.fullName}</h1>
+			<h3>@{this.state.userName}</h3>
 			<h2>{this.state.location}</h2>
-			<h3>@{userName}</h3>
 			</div>
 			</Cell>
 			</Grid>
@@ -98,12 +103,6 @@ class Profile extends Component {
 					<input type="file" onChange={this.handleChange}/>
 					<button onClick={this.handleUpload}>Upload</button>
 					<div/>
-					<input
-		 type="text"
-		 value={this.state.fullName}
-		 onChange={e => this.changeName(e)}
-		/>
-		<div/>
 		<input
 type="text"
 value={this.state.location}
