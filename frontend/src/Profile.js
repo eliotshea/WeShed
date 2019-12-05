@@ -36,10 +36,6 @@ class Profile extends Component {
 		this.setState({
 		 userName: usertemp,
 	 })
-	 var fnametemp = await Auth.getFname()
-	 this.setState({
-		 fullName: fnametemp,
-	 });
 	}
 
 	changeLocation(e){
