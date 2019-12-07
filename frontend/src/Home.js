@@ -24,8 +24,8 @@ class Home extends Component {
 	this.handleUserChallengeChange = this.handleUserChallengeChange.bind(this);
 	this.handleMsgChange = this.handleMsgChange.bind(this);
 	this.handleChallengeAmtChange = this.handleChallengeAmtChange.bind(this);
-	
-	
+
+
   }
 
   async componentDidMount(){
@@ -47,14 +47,14 @@ class Home extends Component {
       });
 
     });
-	
+
 	fetch(DI.DOMAIN + "/get_challenges", {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(d)
         }).then(response => response.json())
 		.then(info => this.setState({ challenge_arr: info }));
-		
+
 	fetch(DI.DOMAIN + "/get_friends", {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -66,7 +66,7 @@ class Home extends Component {
 
   async addFriend(evt) {
 		evt.preventDefault();
-		
+
 		//To ensure that empty is never used for insertions to friends
 		if(this.state.username2 !== ''){
 			var temp_username = await Auth.getUser();
@@ -103,7 +103,7 @@ class Home extends Component {
 				headers: {'Content-Type': 'application/json'},
 				body: JSON.stringify(data)
 			})
-			
+
 		}
 		//Call a reset for challenge and friend refresh
 		this.resetState();
@@ -126,18 +126,18 @@ class Home extends Component {
       message: evt.target.value
     });
   }
-  
+
   handleChallengeAmtChange(evt) {
     this.setState({
       challenge_amt: evt.target.value
     });
   }
-  
-  
-  
-  
+
+
+
+
     async resetState() {
-		
+
 		var temp_username = await Auth.getUser();
 		var d = {username: temp_username};
 
@@ -147,22 +147,22 @@ class Home extends Component {
             body: JSON.stringify(d)
         }).then(response => response.json())
 		.then(info => this.setState({ challenge_arr: info }));
-		
+
 		fetch(DI.DOMAIN + "/get_friends", {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(d)
         }).then(response => response.json())
-		.then(data => this.setState({ friends_arr: data }));	
-	  
+		.then(data => this.setState({ friends_arr: data }));
+
 	}
 
 
 
   render() {
-	
+
 	const {challenge_arr, friends_arr} = this.state;
-	
+
 	let Friendslist = ( <ul>
 		<b>Friends List:</b>
 		{friends_arr.map(friend =>
@@ -171,7 +171,7 @@ class Home extends Component {
 			</li>
 		)}
 	</ul> );
-	
+
 	let Challengelist = ( <ul>
 		<b>Challenges List:</b>
 		{challenge_arr.map(challenge =>
@@ -224,9 +224,9 @@ class Home extends Component {
 		<br></br>
 		<form onSubmit={this.addFriend}>
           <label>Username</label>
-          <input type="text" data-test="username2" value={this.state.username2} onChange={this.handleUserChange} />
+          <input className="inputBar otherbars" type="text" data-test="username2" value={this.state.username2} onChange={this.handleUserChange} />
 
-          <input type="submit" value="Add friend" data-test="submit" />
+          <input className="buttons" type="submit" value="Add friend" data-test="submit" />
         </form>
 		</div>
 
@@ -235,21 +235,21 @@ class Home extends Component {
 		<form onSubmit={this.addChallenge}>
 		  <h6><b>Challenge a User</b></h6>
           <label>To:</label>
-          <input type="text" value={this.state.userchallenge} onChange={this.handleUserChallengeChange} />
+          <input className="inputBar" type="text" value={this.state.userchallenge} onChange={this.handleUserChallengeChange} />
 		  <label>Plays:</label>
-          <input type="number" value={this.state.challenge_amt} onChange={this.handleChallengeAmtChange} />
+          <input className="inputBar" type="number" value={this.state.challenge_amt} onChange={this.handleChallengeAmtChange} />
 		  <label>Message:</label>
-		  <input type="text" data-test="message" value={this.state.message} onChange={this.handleMsgChange} />
-          <input type="submit" value="Add challenge" data-test="submit" />
+		  <input className="inputBar" type="text" data-test="message" value={this.state.message} onChange={this.handleMsgChange} />
+          <input className="buttons" type="submit" value="Add challenge" data-test="submit" />
         </form>
 		</div>
-		
-		
+
+
 		{Friendslist}
 		<br></br>
 		{Challengelist}
-		
-		
+
+
 
       </div>
       </div>

@@ -101,19 +101,20 @@ class Profile extends Component {
 					<h1 className="changepic">Edit Profile</h1>
 					</div>
 					<input type="file" onChange={this.handleChange}/>
-					<button onClick={this.handleUpload}>Upload</button>
+					<button className="buttons" onClick={this.handleUpload}>Upload</button>
 					<div/>
 		<input
+className="inputBar otherbars"
 type="text"
 value={this.state.location}
 onChange={e => this.changeLocation(e)}
 />
 <div/>
 
-		<button onClick={this.getToken}>
+		<button className="buttons" onClick={this.getToken}>
 			getToken
 		</button>
-		<button onClick={this.getU}>
+		<button className="buttons" onClick={this.getU}>
 			getUser
 		</button>
 		</div>

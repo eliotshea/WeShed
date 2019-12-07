@@ -213,9 +213,9 @@ render() {
 
 
 	if(this.state.curr_F_handle && this.state.curr_Bt_ref) {
-		Playlist = <button onClick={this.resetState}>Choose another song</button>
-		Del_song = <button onClick={this.delSong}>Delete current song</button>
-		Del_playlist = <button onClick={this.delPlaylist}>Delete current playlist</button>
+		Playlist = <button className="buttons" onClick={this.resetState}>Choose another song</button>
+		Del_song = <button className="buttons" onClick={this.delSong}>Delete current song</button>
+		Del_playlist = <button className="buttons" onClick={this.delPlaylist}>Delete current playlist</button>
 	}
 
 
@@ -223,7 +223,7 @@ render() {
       <div className="background">
       <div className="Playlists">
 
-        <h1 className= "pageTitle"> Playlists page </h1>
+        <h2> Your Playlists </h2>
 
 		<div className="sheet">
 		{leadSheet}
@@ -233,6 +233,7 @@ render() {
 		{player}
 		</div>
 
+    <div>
     <div>
     <br></br>
     {Del_song}
@@ -246,6 +247,7 @@ render() {
     <div>
     <br></br>
     {Playlist}
+    </div>
     </div>
 
 		<div>

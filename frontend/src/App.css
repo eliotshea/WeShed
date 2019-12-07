@@ -71,6 +71,26 @@
 }
 
 
+.inputBar{
+  width: 15%;
+  height: 20px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.43);
+  transition: 0.3s all;
+}
+
+.otherbars{
+  width: 30%;
+}
+
+.buttons{
+  border-radius: 5px;
+  position: relative;
+  padding: 5px 30px;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+
 /*header*/
 .Header {
   background-color: #333;
@@ -142,16 +162,6 @@ li button {
 
 /*sheet and player layout*/
 
-.sheet{
-  float:left;
-}
-
-.player{
-  float:right;
-  margin-left: 2%;
-}
-
-
 .Songs{
   margin-top: 2em;
 }
@@ -198,12 +208,10 @@ li button {
 
 .sheet{
   float:left;
-  margin-left: 10%;
 }
 
 .player{
   float:right;
-  margin-right: 10%;
 }
 
 

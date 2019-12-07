@@ -172,7 +172,7 @@ render() {
 	const {songName, song_arr} = this.state;
 	let player = <p></p>;
 	if(this.state.curr_Bt_ref){
-		player = <center><ReactPlayer className="player" url={this.state.curr_Bt_ref} controls="true" /> </center>
+		player = <center><ReactPlayer url={this.state.curr_Bt_ref} controls="true" /> </center>
 	}
 	let leadSheet = <p></p>;
 	if(this.state.curr_F_handle){
@@ -204,12 +204,12 @@ render() {
       <div className="Songs">
 
       <div className="pageTitle">
-        <h1> Songs page </h1>
+        <h1> Songs </h1>
 
     		  <form onSubmit={this.handleSubmit}>
-    		    <label>Playlist Name:</label>
-              <input type="text" data-test="text" value={this.state.Pname} onChange={this.handlePnameChange} />
-    		      <input type="submit" value="Add to playlist" data-test="submit" />
+    		    <label>Playlist Name</label>
+              <input className="inputBar" type="text" data-test="text" value={this.state.Pname} onChange={this.handlePnameChange} />
+    		      <input className="buttons" type="submit" value="Add to playlist" data-test="submit" />
     		  </form>
           &nbsp;
           <form ref="form">
@@ -217,12 +217,16 @@ render() {
               type="text"
               placeholder="Search for song..."
               onChange={this.handleOnInputChange}
+              className="inputBar"
             />
         </form>
       </div>
 
-  		<div>
+  		<div className="sheet">
     		{leadSheet}
+      </div>
+
+      <div className="player">
     		{player}
   		</div>
 
