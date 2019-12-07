@@ -122,6 +122,7 @@
 /*song Listings*/
 ul, li {
     list-style-type: none;
+    display: inline;
 }
 
 li {
